@@ -1,0 +1,31 @@
+{
+  "dockerComposeFile": "../docker-compose.yaml",
+  "service": "my_devcontainer",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-typescript-next",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "github.vscode-github-actions"
+      ]
+    }
+  },
+  "initializeCommand": "bash .devcontainer/initialize.sh",
+  "postCreateCommand": ["yarn", "install"],
+  "postStartCommand": ["yarn", "dev"],
+  "forwardPorts": [4000, 8007, 5437, 5051],
+  "portsAttributes": {
+    "3000": {
+      "label": "App",
+      "onAutoForward": "notify",
+      "requireLocalPort": true
+    },
+    "7007": {
+      "label": "Backend",
+      "onAutoForward": "notify",
+      "requireLocalPort": true
+    }
+  }
+}
