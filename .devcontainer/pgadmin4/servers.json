@@ -5,10 +5,10 @@
       "Group": "Servers",
       "Host": "my_postgres_db",
       "Port": 5432,
-      "Username": "backstage_pguser",
+      "Username": "axl_backstage_user",
       "SSLMode": "prefer",
-      "Password": "bs_secret",
-      "MaintenanceDB": "backstage"
+      "Password": "axl_backstage_pass",
+      "MaintenanceDB": "axl_backstage_plugins"
     }
   }
 }
