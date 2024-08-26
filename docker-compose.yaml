@@ -37,11 +37,11 @@ services:
       - app_node_modules:/workspace/packages/app/node_modules
       - backend_node_modules:/workspace/packages/backend/node_modules
     environment:
-      POSTGRES_HOST: my_postgres_db
-      POSTGRES_USER: axl_backstage_pass
-      POSTGRES_PASSWORD: axl_backstage_user
-      POSTGRES_PORT: 5432
-      POSTGRES_DB: axl_backstage_plugins
+      APP_DATABASE_HOST: my_postgres_db
+      APP_DATABASE_USER: axl_backstage_user
+      APP_DATABASE_PASSWORD: axl_backstage_pass
+      APP_DATABASE_PORT: 5432
+      APP_DATABASE_DBNAME: axl_backstage_plugins
     env_file:
       - .devcontainer/devcontainer.env
 
