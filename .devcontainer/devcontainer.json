@@ -17,12 +17,12 @@
   "postStartCommand": ["yarn", "dev"],
   "forwardPorts": [4000, 8007, 5437, 5051],
   "portsAttributes": {
-    "3000": {
+    "4000": {
       "label": "App",
       "onAutoForward": "notify",
       "requireLocalPort": true
     },
-    "7007": {
+    "8007": {
       "label": "Backend",
       "onAutoForward": "notify",
       "requireLocalPort": true
