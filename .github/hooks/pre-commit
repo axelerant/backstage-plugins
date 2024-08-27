@@ -1,0 +1,29 @@
+#!/bin/bash
+
+echo "Running pre-commit checks..."
+
+# Run linting
+yarn lint
+lint_status=$?
+
+# Run tsc
+yarn tsc
+tsc_status=$?
+
+# Run prettier:check
+yarn prettier:check
+prettier_status=$?
+
+# Run tests
+yarn test --no-watch --silent
+test_status=$?
+
+# Check if any of the commands failed, and prevent the commit if so
+if [ $lint_status -ne 0 ] || [ $prettier_status -ne 0 ] || [ $test_status -ne 0 ] || [ $tsc_status -ne 0 ]; then
+  echo "Pre-commit checks failed. Please make sure commit passes lint, prettier:check and test. Commit aborted."
+  exit 1
+fi
+
+echo "Pre-commit checks passed. Commit allowed."
+exit 0
+
