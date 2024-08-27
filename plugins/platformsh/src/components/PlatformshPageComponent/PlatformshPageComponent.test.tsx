@@ -1,14 +1,11 @@
 import React from 'react';
-import { ExampleComponent } from './ExampleComponent';
+import { PlatformshPageComponent } from './PlatformshPageComponent';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { screen } from '@testing-library/react';
-import {
-  registerMswTestHooks,
-  renderInTestApp,
-} from '@backstage/test-utils';
+import { registerMswTestHooks, renderInTestApp } from '@backstage/test-utils';
 
-describe('ExampleComponent', () => {
+describe('PlatformshPageComponent', () => {
   const server = setupServer();
   // Enable sane handlers for network requests
   registerMswTestHooks(server);
@@ -21,9 +18,9 @@ describe('ExampleComponent', () => {
   });
 
   it('should render', async () => {
-    await renderInTestApp(<ExampleComponent />);
+    await renderInTestApp(<PlatformshPageComponent />);
     expect(
-      screen.getByText('Welcome to platformsh!'),
+      screen.getByText('Platform.sh Project Explorer'),
     ).toBeInTheDocument();
   });
 });

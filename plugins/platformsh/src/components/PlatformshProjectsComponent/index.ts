@@ -1,0 +1,1 @@
+export { PlatformshProjectsComponent } from './PlatformshProjectsComponent';

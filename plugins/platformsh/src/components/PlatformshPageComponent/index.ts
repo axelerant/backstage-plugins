@@ -1,0 +1,1 @@
+export { PlatformshPageComponent } from './PlatformshPageComponent';
