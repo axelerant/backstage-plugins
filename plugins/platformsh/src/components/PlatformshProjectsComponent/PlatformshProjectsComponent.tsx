@@ -42,7 +42,6 @@ export const DenseTable = ({ projects }: DenseTableProps) => {
 };
 
 export const PlatformshProjectsComponent = () => {
-
   const platformshApi = useApi(platformshApiRef);
 
   const { value, loading, error } = useAsync(async (): Promise<
