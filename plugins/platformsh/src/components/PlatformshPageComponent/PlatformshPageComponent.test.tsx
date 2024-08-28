@@ -3,12 +3,27 @@ import { PlatformshPageComponent } from './PlatformshPageComponent';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { screen } from '@testing-library/react';
-import { registerMswTestHooks, renderInTestApp } from '@backstage/test-utils';
+import {
+  registerMswTestHooks,
+  renderInTestApp,
+  TestApiProvider,
+} from '@backstage/test-utils';
+import { platformshApiRef } from '../../api';
 
 describe('PlatformshPageComponent', () => {
   const server = setupServer();
   // Enable sane handlers for network requests
   registerMswTestHooks(server);
+
+  const platformshApi: jest.Mocked<typeof platformshApiRef.T> = {
+    listProjects: jest.fn(),
+  };
+
+  const Wrapper = ({ children }: { children?: React.ReactNode }) => (
+    <TestApiProvider apis={[[platformshApiRef, platformshApi]]}>
+      {children}
+    </TestApiProvider>
+  );
 
   // setup mock response
   beforeEach(() => {
@@ -18,7 +33,12 @@ describe('PlatformshPageComponent', () => {
   });
 
   it('should render', async () => {
-    await renderInTestApp(<PlatformshPageComponent />);
+    platformshApi.listProjects.mockResolvedValue([]);
+    await renderInTestApp(
+      <Wrapper>
+        <PlatformshPageComponent />
+      </Wrapper>,
+    );
     expect(
       screen.getByText('Platform.sh Project Explorer'),
     ).toBeInTheDocument();
