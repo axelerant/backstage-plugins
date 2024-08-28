@@ -20,14 +20,16 @@ export const DenseTable = ({ projects }: DenseTableProps) => {
     { title: 'Project Title', field: 'title' },
     { title: 'Region', field: 'region' },
     { title: 'Plan', field: 'plan' },
+    { title: 'Status', field: 'status' },
   ];
 
   const data = projects.map(project => {
     return {
       id: project.project_id,
       title: project.project_title,
-      region: project.project_region,
+      region: project.project_region_label,
       plan: project.plan,
+      status: project.status,
     };
   });
 
