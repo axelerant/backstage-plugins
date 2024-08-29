@@ -3,6 +3,7 @@ import {
   createBackendPlugin,
 } from '@backstage/backend-plugin-api';
 import { createRouter } from './service/router';
+import { PlatformshHelper } from './PlatformshHelper';
 
 /**
  * platformshPlugin backend plugin
@@ -19,10 +20,12 @@ export const platformshPlugin = createBackendPlugin({
         config: coreServices.rootConfig,
       },
       async init({ httpRouter, logger, config }) {
+        const platformshHelper = new PlatformshHelper(config, logger);
         httpRouter.use(
           await createRouter({
             logger,
             config,
+            platformshHelper,
           }),
         );
         httpRouter.addAuthPolicy({
