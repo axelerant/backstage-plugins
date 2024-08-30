@@ -10,6 +10,12 @@ import {
 } from '@backstage/test-utils';
 import { platformshApiRef } from '../../api';
 
+jest.mock('@backstage/plugin-catalog-react', () => ({
+  useEntity: () => {
+    return { loading: false, entity: { metadata: {} } };
+  },
+}));
+
 describe('EntityTabComponent', () => {
   const server = setupServer();
   // Enable sane handlers for network requests
