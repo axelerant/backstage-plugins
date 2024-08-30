@@ -35,11 +35,9 @@ describe('ProjectDetailsCard', () => {
   it('should render', async () => {
     await renderInTestApp(
       <Wrapper>
-        <ProjectDetailsCard projectId='abc-123'/>
+        <ProjectDetailsCard projectId="abc-123" />
       </Wrapper>,
     );
-    expect(
-      screen.getByText('Project Details'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Project Details')).toBeInTheDocument();
   });
 });
