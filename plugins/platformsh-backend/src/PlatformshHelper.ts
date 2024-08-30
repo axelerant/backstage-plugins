@@ -80,7 +80,7 @@ export class PlatformshHelper {
     const client = await this.getClient();
     // Passing bool value givens an error @todo fix undefined as unknown as boolean later
     const projects = await client.getSubscriptions(
-      {},
+      { status: 'active' },
       undefined as unknown as boolean,
     );
     return projects.map(project => ({
