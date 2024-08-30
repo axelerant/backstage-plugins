@@ -1,1 +1,5 @@
-export { platformshPlugin, PlatformshPage } from './plugin';
+export {
+  platformshPlugin,
+  PlatformshPage,
+  EntityPlatformshContents,
+} from './plugin';

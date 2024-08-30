@@ -58,6 +58,7 @@ import {
   EntityKubernetesContent,
   isKubernetesAvailable,
 } from '@backstage/plugin-kubernetes';
+import { EntityPlatformshContents } from '@internal/backstage-plugin-platformsh';
 
 const techdocsContent = (
   <EntityTechdocsContent>
@@ -222,6 +223,9 @@ const websiteEntityPage = (
 
     <EntityLayout.Route path="/docs" title="Docs">
       {techdocsContent}
+    </EntityLayout.Route>
+    <EntityLayout.Route path="/platformsh" title="Platformsh">
+      <EntityPlatformshContents />
     </EntityLayout.Route>
   </EntityLayout>
 );

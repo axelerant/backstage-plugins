@@ -1,5 +1,6 @@
 import {
   createApiFactory,
+  createComponentExtension,
   createPlugin,
   createRoutableExtension,
   discoveryApiRef,
@@ -33,5 +34,17 @@ export const PlatformshPage = platformshPlugin.provide(
     component: () =>
       import('./components/PageComponent').then(m => m.PageComponent),
     mountPoint: rootRouteRef,
+  }),
+);
+
+export const EntityPlatformshContents = platformshPlugin.provide(
+  createComponentExtension({
+    name: 'EntityPlatformshContents',
+    component: {
+      lazy: () =>
+        import('./components/EntityTabComponent').then(
+          m => m.EntityTabComponent,
+        ),
+    },
   }),
 );

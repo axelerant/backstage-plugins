@@ -1,0 +1,1 @@
+export { EntityTabComponent } from './EntityTabComponent';
