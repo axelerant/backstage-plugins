@@ -1,11 +1,11 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { PlatformshProjectsComponent } from './PlatformshProjectsComponent';
+import { ProjectsComponent } from './ProjectsComponent';
 import { platformshApiRef } from '../../api';
 import { TestApiProvider } from '@backstage/test-utils';
 import { PlatformShProject } from '../../models';
 
-describe('PlatformshProjectsComponent', () => {
+describe('ProjectsComponent', () => {
   const platformshApi: jest.Mocked<typeof platformshApiRef.T> = {
     listProjects: jest.fn(),
   };
@@ -45,7 +45,7 @@ describe('PlatformshProjectsComponent', () => {
 
     render(
       <Wrapper>
-        <PlatformshProjectsComponent />
+        <ProjectsComponent />
       </Wrapper>,
     );
 

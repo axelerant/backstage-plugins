@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlatformshPageComponent } from './PlatformshPageComponent';
+import { PageComponent } from './PageComponent';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { screen } from '@testing-library/react';
@@ -36,7 +36,7 @@ describe('PlatformshPageComponent', () => {
     platformshApi.listProjects.mockResolvedValue([]);
     await renderInTestApp(
       <Wrapper>
-        <PlatformshPageComponent />
+        <PageComponent />
       </Wrapper>,
     );
     expect(

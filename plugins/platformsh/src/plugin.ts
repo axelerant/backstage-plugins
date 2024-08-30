@@ -31,9 +31,7 @@ export const PlatformshPage = platformshPlugin.provide(
   createRoutableExtension({
     name: 'PlatformshPage',
     component: () =>
-      import('./components/PlatformshPageComponent').then(
-        m => m.PlatformshPageComponent,
-      ),
+      import('./components/PageComponent').then(m => m.PageComponent),
     mountPoint: rootRouteRef,
   }),
 );
