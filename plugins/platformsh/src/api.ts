@@ -7,6 +7,7 @@ import { PlatformShProject } from './models';
 
 export interface PlatformshApi {
   listProjects(): Promise<PlatformShProject[]>;
+  getProjectInfo(id: string): Promise<PlatformShProject>;
 }
 
 export const platformshApiRef = createApiRef<PlatformshApi>({
@@ -16,17 +17,34 @@ export const platformshApiRef = createApiRef<PlatformshApi>({
 export class PlatformshClient implements PlatformshApi {
   private readonly discoveryApi: DiscoveryApi;
   private readonly fetchApi: FetchApi;
+  private baseUrl: string = '';
 
   constructor(options: { discoveryApi: DiscoveryApi; fetchApi: FetchApi }) {
     this.discoveryApi = options.discoveryApi;
     this.fetchApi = options.fetchApi;
   }
 
-  async listProjects(): Promise<PlatformShProject[]> {
-    const baseUrl = await this.discoveryApi.getBaseUrl('platformsh');
+  async getBaseUrl() {
+    if (this.baseUrl) {
+      return this.baseUrl;
+    }
+    this.baseUrl = await this.discoveryApi.getBaseUrl('platformsh');
+    return this.baseUrl;
+  }
 
-    const response = await this.fetchApi.fetch(`${baseUrl}/projects`);
+  async listProjects(): Promise<PlatformShProject[]> {
+    const response = await this.fetchApi.fetch(
+      `${await this.getBaseUrl()}/projects`,
+    );
     const data = await response.json();
     return data.result.projects;
+  }
+
+  async getProjectInfo(id: string): Promise<PlatformShProject> {
+    const response = await this.fetchApi.fetch(
+      `${await this.getBaseUrl()}/project/${id}`,
+    );
+    const data = await response.json();
+    return data.result.data;
   }
 }

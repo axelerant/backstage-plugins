@@ -11,7 +11,7 @@ export const EntityTabComponent = () => {
   return (
     <Grid container spacing={3} direction="column">
       <Grid item>This is Platformsh entity tab</Grid>
-      <Grid>
+      <Grid item md={4}>
         <ProjectDetailsCard projectId={projectId} />
       </Grid>
     </Grid>

@@ -9,6 +9,7 @@ import {
   TestApiProvider,
 } from '@backstage/test-utils';
 import { platformshApiRef } from '../../../api';
+import { PlatformShProject } from '../../../models';
 
 describe('ProjectDetailsCard', () => {
   const server = setupServer();
@@ -17,6 +18,7 @@ describe('ProjectDetailsCard', () => {
 
   const platformshApi: jest.Mocked<typeof platformshApiRef.T> = {
     listProjects: jest.fn(),
+    getProjectInfo: jest.fn(),
   };
 
   const Wrapper = ({ children }: { children?: React.ReactNode }) => (
@@ -33,11 +35,29 @@ describe('ProjectDetailsCard', () => {
   });
 
   it('should render', async () => {
+    const project: PlatformShProject = {
+      id: 'proj-123',
+      status: 'active',
+      plan: 'standard',
+      project_id: '12345abcde',
+      project_title: 'My Awesome Project',
+      project_region_label: 'North America',
+      project_ui: 'https://app.platform.sh/projects/12345abcde',
+      size: 'large',
+      environment: {
+        count: 10,
+        used: 7,
+      },
+      url: 'https://my-awesome-project.com',
+    };
+    platformshApi.getProjectInfo.mockResolvedValue(project);
+
     await renderInTestApp(
       <Wrapper>
         <ProjectDetailsCard projectId="abc-123" />
       </Wrapper>,
     );
     expect(screen.getByText('Project Details')).toBeInTheDocument();
+    expect(screen.getByText('My Awesome Project')).toBeInTheDocument();
   });
 });

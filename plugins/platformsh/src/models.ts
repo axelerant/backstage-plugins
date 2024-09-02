@@ -6,4 +6,10 @@ export type PlatformShProject = {
   project_title: string;
   project_region_label: string;
   project_ui: string;
+  size?: string;
+  environment?: {
+    count: number;
+    used: number;
+  };
+  url?: string;
 };
