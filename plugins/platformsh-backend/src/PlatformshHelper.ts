@@ -3,6 +3,7 @@ import {
   RootConfigService,
 } from '@backstage/backend-plugin-api';
 import Client from 'platformsh-client';
+import Environment from 'platformsh-client/types/model/Environment';
 
 type PlatformshAccessToken = {
   access_token: string;
@@ -92,5 +93,41 @@ export class PlatformshHelper {
       project_region_label: project.project_region_label,
       project_ui: project.project_ui,
     }));
+  }
+
+  async getProjectInfo(id: string) {
+    const client = await this.getClient();
+    const project = await client.getProject(id);
+    const subscriptionId = project.getSubscriptionId();
+    const subscription = await client.getSubscription(subscriptionId);
+    const enviroments = await client.getEnvironments(id);
+
+    return {
+      project_id: project.id,
+      project_title: project.title,
+      status: subscription.status,
+      plan: subscription.plan,
+      project_region_label: subscription.project_region_label,
+      project_ui: subscription.project_ui,
+      size: subscription.storage,
+      environment: {
+        count: project.subscription.environments + 1,
+        used: enviroments.length,
+      },
+      url: await this.getProjectDomain(enviroments),
+    };
+  }
+
+  async getProjectDomain(enviroments: Environment[]): Promise<string> {
+    let mainEnviroment = enviroments.find(item => item.name === 'main');
+    if (!mainEnviroment) {
+      mainEnviroment = enviroments[0];
+    }
+    const urls: string[] = mainEnviroment.getRouteUrls();
+    let url = urls.find(item => item.startsWith('https'));
+    if (!url) {
+      url = urls[0];
+    }
+    return url;
   }
 }
