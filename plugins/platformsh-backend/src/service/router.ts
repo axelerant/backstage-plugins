@@ -39,6 +39,53 @@ export async function createRouter(
     },
   );
 
+  router.get(
+    '/project/:id/environments',
+    async (req: Request<{ id: string }, {}, {}, {}>, response) => {
+      const data = await platformshHelper.getProjectEnvironments(req.params.id);
+      response.json({ result: { data } });
+    },
+  );
+
+  router.post(
+    '/project/:id/environments',
+    async (
+      req: Request<
+        { id: string },
+        {},
+        { environment_id: string; action: string },
+        {}
+      >,
+      response,
+    ) => {
+      const valid_action = [
+        'pause',
+        'resume',
+        'activate',
+        'deactivate',
+        'delete',
+      ];
+      if (!valid_action.includes(req.body.action)) {
+        response.json({
+          result: {
+            data: {
+              status: 0,
+              message: 'Invalid action',
+            },
+          },
+        });
+        return;
+      }
+
+      const data = await platformshHelper.doEnvironmentAction(
+        req.params.id,
+        req.body.environment_id,
+        req.body.action,
+      );
+      response.json({ result: { data } });
+    },
+  );
+
   const middleware = MiddlewareFactory.create({ logger, config });
 
   router.use(middleware.error());

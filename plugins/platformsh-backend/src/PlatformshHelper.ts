@@ -11,6 +11,19 @@ type PlatformshAccessToken = {
   token_type: string;
 };
 
+type PlatformshEnvironment = {
+  id: string;
+  name: string;
+  machine_name: string;
+  default_domain: string;
+  edge_hostname: string;
+  status: string;
+  type: string;
+  created_at: string;
+  updated_at: string;
+  parent: string;
+};
+
 export class PlatformshHelper {
   private lastAccessToken: PlatformshAccessToken = {} as PlatformshAccessToken;
   private tokenExpireTime: number = 0;
@@ -118,6 +131,24 @@ export class PlatformshHelper {
     };
   }
 
+  async getProjectEnvironments(id: string) {
+    const client = await this.getClient();
+    const enviroments: any = await client.getEnvironments(id);
+
+    return enviroments.map((enviroment: PlatformshEnvironment) => ({
+      id: enviroment.id,
+      name: enviroment.name,
+      machine_name: enviroment.machine_name,
+      default_domain: enviroment.default_domain,
+      edge_hostname: enviroment.edge_hostname,
+      status: enviroment.status,
+      parent: enviroment.parent,
+      type: enviroment.type,
+      created_at: enviroment.created_at,
+      updated_at: enviroment.updated_at,
+    }));
+  }
+
   async getProjectDomain(enviroments: Environment[]): Promise<string> {
     let mainEnviroment = enviroments.find(item => item.name === 'main');
     if (!mainEnviroment) {
@@ -129,5 +160,86 @@ export class PlatformshHelper {
       url = urls[0];
     }
     return url;
+  }
+
+  async getEnvironment(project_id: string, env_id: string) {
+    const client = await this.getClient();
+    const enviroment = await client.getEnvironment(project_id, env_id);
+    return enviroment;
+  }
+
+  async doEnvironmentAction(
+    project_id: string,
+    env_id: string,
+    action: string,
+  ) {
+    const environment = await this.getEnvironment(project_id, env_id);
+    const result = this.validateEnvironmentAction(environment, action);
+    if (!result.valid) {
+      return result;
+    }
+
+    try {
+      if (action === 'pause') {
+        const activity = await environment.pause();
+        await activity.wait();
+      } else if (action === 'resume') {
+        const activity = await environment.resume();
+        await activity.wait();
+      } else if (action === 'activate') {
+        const activity = await environment.activate();
+        await activity.wait();
+      } else if (action === 'deactivate') {
+        const activity = await environment.deactivate();
+        await activity.wait();
+      } else if (action === 'delete') {
+        await environment.delete();
+      }
+    } catch (error) {
+      return {
+        valid: 0,
+        message: `Something went wrong. ${error}`,
+      };
+    }
+
+    return {
+      valid: 1,
+    };
+  }
+
+  validateEnvironmentAction(enviroment: Environment, action: string) {
+    const validationMap: { [key: string]: string } = {
+      production: 'No action can be performed on production environments',
+      deleting: 'Environment is already deleting',
+      activeActivate: 'Environment is already active',
+      activeResume: 'Environment is already active',
+      activeDelete:
+        'You must deactivate your environment before you can delete',
+      pauseDelete: 'You must deactivate your environment before you can delete',
+      dirtyDelete: 'You must deactivate your environment before you can delete',
+      pausedPause: 'Environment is already paused',
+      inactiveDeactivate: 'Environment is already inactive',
+      inactivePause: 'Environment is already inactive',
+    };
+
+    const key = `${enviroment.status}${
+      action.charAt(0).toUpperCase() + action.slice(1)
+    }`;
+
+    if (enviroment.type === 'production') {
+      return { valid: 0, message: validationMap.production };
+    }
+
+    if (enviroment.type === 'deleting') {
+      return { valid: 0, message: validationMap.deleting };
+    }
+
+    if (validationMap[key]) {
+      return { valid: 0, message: validationMap[key] };
+    }
+
+    return {
+      valid: 1,
+    };
   }
 }
