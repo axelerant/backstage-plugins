@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProjectDetailsCard } from './ProjectDetailsCard';
+import { EnvironmentsCard } from './EnvironmentsCard';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 import { screen } from '@testing-library/react';
@@ -9,7 +9,7 @@ import {
   TestApiProvider,
 } from '@backstage/test-utils';
 import { platformshApiRef } from '../../../api';
-import { PlatformShProject } from '../../../models';
+import { PlatformshEnvironment } from '../../../models';
 
 describe('ProjectDetailsCard', () => {
   const server = setupServer();
@@ -37,29 +37,26 @@ describe('ProjectDetailsCard', () => {
   });
 
   it('should render', async () => {
-    const project: PlatformShProject = {
-      id: 'proj-123',
+    const enviroment: PlatformshEnvironment = {
+      id: '123456',
+      name: 'Sample Project',
+      machine_name: 'sample_project_machine',
+      default_domain: 'sampleproject.com',
+      edge_hostname: 'edge.sampleproject.com',
       status: 'active',
-      plan: 'standard',
-      project_id: '12345abcde',
-      project_title: 'My Awesome Project',
-      project_region_label: 'North America',
-      project_ui: 'https://app.platform.sh/projects/12345abcde',
-      size: 'large',
-      environment: {
-        count: 10,
-        used: 7,
-      },
-      url: 'https://my-awesome-project.com',
+      type: 'production',
+      created_at: '2023-01-15T10:30:00Z',
+      updated_at: '2024-09-09T12:00:00Z',
+      parent: 'parent-project-789',
     };
-    platformshApi.getProjectInfo.mockResolvedValue(project);
+    platformshApi.getProjectEnvironments.mockResolvedValue([enviroment]);
 
     await renderInTestApp(
       <Wrapper>
-        <ProjectDetailsCard projectId="abc-123" />
+        <EnvironmentsCard projectId="abc-123" />
       </Wrapper>,
     );
-    expect(screen.getByText('Project Details')).toBeInTheDocument();
-    expect(screen.getByText('My Awesome Project')).toBeInTheDocument();
+    expect(screen.getByText('Environments')).toBeInTheDocument();
+    expect(screen.getByText('Sample Project')).toBeInTheDocument();
   });
 });

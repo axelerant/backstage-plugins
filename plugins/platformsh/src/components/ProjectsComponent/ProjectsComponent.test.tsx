@@ -9,6 +9,8 @@ describe('ProjectsComponent', () => {
   const platformshApi: jest.Mocked<typeof platformshApiRef.T> = {
     listProjects: jest.fn(),
     getProjectInfo: jest.fn(),
+    getProjectEnvironments: jest.fn(),
+    doEnvironmentAction: jest.fn(),
   };
 
   const Wrapper = ({ children }: { children?: React.ReactNode }) => (
