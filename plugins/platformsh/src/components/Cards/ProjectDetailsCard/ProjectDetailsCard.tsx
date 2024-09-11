@@ -7,7 +7,7 @@ import {
 import { Typography, Box, makeStyles, Link } from '@material-ui/core';
 import { platformshApiRef } from '../../../api';
 import { useApi } from '@backstage/core-plugin-api';
-import { PlatformShProject } from '../../../models';
+import { PlatformshProject } from '@internal/backstage-plugin-platformsh-common';
 import useAsync from 'react-use/lib/useAsync';
 
 const useStyles = makeStyles(theme => ({
@@ -61,7 +61,7 @@ export const ProjectDetailsCard = ({ projectId }: { projectId: string }) => {
   const classes = useStyles();
 
   const { value, loading, error } =
-    useAsync(async (): Promise<PlatformShProject> => {
+    useAsync(async (): Promise<PlatformshProject> => {
       return platformshApi.getProjectInfo(projectId);
     }, []);
 

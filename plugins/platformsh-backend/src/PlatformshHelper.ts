@@ -5,7 +5,10 @@ import {
 import Client from 'platformsh-client';
 import Activity from 'platformsh-client/types/model/Activity';
 import Environment from 'platformsh-client/types/model/Environment';
-import { EnvironmentMethods, PlatformshEnvironment } from './model';
+import {
+  EnvironmentMethods,
+  PlatformshEnvironment,
+} from '@internal/backstage-plugin-platformsh-common';
 
 type PlatformshAccessToken = {
   access_token: string;

@@ -6,12 +6,12 @@ import {
   ResponseErrorPanel,
 } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
-import { PlatformShProject } from '../../models';
+import { PlatformshProject } from '@internal/backstage-plugin-platformsh-common';
 import { useApi } from '@backstage/core-plugin-api';
 import { platformshApiRef } from '../../api';
 
 type DenseTableProps = {
-  projects: PlatformShProject[];
+  projects: PlatformshProject[];
 };
 
 export const DenseTable = ({ projects }: DenseTableProps) => {
@@ -47,7 +47,7 @@ export const ProjectsComponent = () => {
   const platformshApi = useApi(platformshApiRef);
 
   const { value, loading, error } = useAsync(async (): Promise<
-    PlatformShProject[]
+    PlatformshProject[]
   > => {
     return platformshApi.listProjects();
   }, []);

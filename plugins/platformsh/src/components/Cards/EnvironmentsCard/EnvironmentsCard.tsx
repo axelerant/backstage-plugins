@@ -5,7 +5,7 @@ import {
   Progress,
   ResponseErrorPanel,
 } from '@backstage/core-components';
-import { PlatformshEnvironment } from '../../../models';
+import { PlatformshEnvironment } from '@internal/backstage-plugin-platformsh-common';
 import { alertApiRef, useApi } from '@backstage/core-plugin-api';
 import { platformshApiRef } from '../../../api';
 import { ActionButtons } from './ActionButtons';

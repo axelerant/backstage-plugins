@@ -9,7 +9,7 @@ import {
   TestApiProvider,
 } from '@backstage/test-utils';
 import { platformshApiRef } from '../../api';
-import { PlatformShProject } from '../../models';
+import { PlatformshProject } from '@internal/backstage-plugin-platformsh-common';
 
 jest.mock('@backstage/plugin-catalog-react', () => ({
   useEntity: () => {
@@ -50,7 +50,7 @@ describe('EntityTabComponent', () => {
   });
 
   it('should render', async () => {
-    const project: PlatformShProject = {
+    const project: PlatformshProject = {
       id: 'proj-123',
       status: 'active',
       plan: 'standard',

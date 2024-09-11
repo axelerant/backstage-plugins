@@ -6,7 +6,7 @@ import {
 import express, { Request } from 'express';
 import Router from 'express-promise-router';
 import { PlatformshHelper } from '../PlatformshHelper';
-import { EnvironmentMethods } from '../model';
+import { EnvironmentMethods } from '@internal/backstage-plugin-platformsh-common';
 
 export interface RouterOptions {
   logger: LoggerService;

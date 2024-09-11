@@ -9,7 +9,7 @@ import {
   TestApiProvider,
 } from '@backstage/test-utils';
 import { platformshApiRef } from '../../../api';
-import { PlatformShProject } from '../../../models';
+import { PlatformshProject } from '@internal/backstage-plugin-platformsh-common';
 
 describe('ProjectDetailsCard', () => {
   const server = setupServer();
@@ -37,7 +37,7 @@ describe('ProjectDetailsCard', () => {
   });
 
   it('should render', async () => {
-    const project: PlatformShProject = {
+    const project: PlatformshProject = {
       id: 'proj-123',
       status: 'active',
       plan: 'standard',

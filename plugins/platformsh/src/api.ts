@@ -7,14 +7,14 @@ import {
   EnvironmentActionResponse,
   ListProjectsResponse,
   PlatformshEnvironment,
-  PlatformShProject,
+  PlatformshProject,
   ProjectEnvironmentsResponse,
   ProjectInfoResponse,
-} from './models';
+} from '@internal/backstage-plugin-platformsh-common';
 
 export interface PlatformshApi {
-  listProjects(): Promise<PlatformShProject[]>;
-  getProjectInfo(id: string): Promise<PlatformShProject>;
+  listProjects(): Promise<PlatformshProject[]>;
+  getProjectInfo(id: string): Promise<PlatformshProject>;
   getProjectEnvironments(id: string): Promise<PlatformshEnvironment[]>;
   doEnvironmentAction(
     projectId: string,
@@ -53,12 +53,12 @@ export class PlatformshClient implements PlatformshApi {
     return response.json();
   }
 
-  async listProjects(): Promise<PlatformShProject[]> {
+  async listProjects(): Promise<PlatformshProject[]> {
     const data = await this.fetchApiData<ListProjectsResponse>('/projects');
     return data.result.projects;
   }
 
-  async getProjectInfo(id: string): Promise<PlatformShProject> {
+  async getProjectInfo(id: string): Promise<PlatformshProject> {
     const data = await this.fetchApiData<ProjectInfoResponse>(`/project/${id}`);
     return data.result.projectData;
   }
