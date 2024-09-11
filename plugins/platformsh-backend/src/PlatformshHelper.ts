@@ -173,37 +173,55 @@ export class PlatformshHelper {
     env_id: string,
     action: string,
   ) {
-    const environment = await this.getEnvironment(project_id, env_id);
-    const result = this.validateEnvironmentAction(environment, action);
-    if (!result.valid) {
-      return result;
-    }
-
+    let successMsg = '';
     try {
+      const environment = await this.getEnvironment(
+        project_id,
+        encodeURIComponent(env_id),
+      );
+      const result = this.validateEnvironmentAction(environment, action);
+      if (!result.valid) {
+        return result;
+      }
+
       if (action === 'pause') {
         const activity = await environment.pause();
         await activity.wait();
+        successMsg = 'Environment puased successfully!';
       } else if (action === 'resume') {
         const activity = await environment.resume();
         await activity.wait();
+        successMsg = 'Environment resumed successfully!';
       } else if (action === 'activate') {
         const activity = await environment.activate();
         await activity.wait();
+        successMsg = 'Environment activated successfully!';
       } else if (action === 'deactivate') {
         const activity = await environment.deactivate();
         await activity.wait();
+        successMsg = 'Environment deactivated successfully!';
       } else if (action === 'delete') {
         await environment.delete();
+        successMsg = 'Environment deleted successfully!';
       }
     } catch (error) {
+      let errorMsg = '';
+      if (error instanceof Error) {
+        errorMsg = error.message;
+      } else if (error && typeof error === 'object' && 'message' in error) {
+        errorMsg = error.message as string;
+      } else {
+        errorMsg = String(error);
+      }
       return {
         valid: 0,
-        message: `Something went wrong. ${error}`,
+        message: `Something went wrong. ${errorMsg}`,
       };
     }
 
     return {
       valid: 1,
+      message: successMsg,
     };
   }
 
