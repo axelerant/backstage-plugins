@@ -29,7 +29,7 @@ export type PlatformshEnvironment = {
 
 export type EnvironmentActionResult = {
   result: {
-    data: {
+    actionResult: {
       valid: number;
       message: string;
     };

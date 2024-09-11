@@ -21,29 +21,47 @@ export async function createRouter(
   const router = Router();
   router.use(express.json());
 
-  router.get('/health', (_, response) => {
-    logger.info('PONG!');
-    response.json({ status: 'ok' });
+  router.get('/health', (_, res) => {
+    logger.info('Health check - PONG!');
+    res.json({ status: 'ok' });
   });
 
-  router.get('/projects', async (_, response) => {
-    const projects = await platformshHelper.listProjects();
-    response.json({ result: { projects } });
+  router.get('/projects', async (_, res) => {
+    try {
+      const projects = await platformshHelper.listProjects();
+      res.json({ result: { projects } });
+    } catch (error) {
+      logger.error(`Failed to fetch projects: ${error}`);
+      res.status(500).json({ error: 'Unable to retrieve projects' });
+    }
   });
 
-  router.get(
-    '/project/:id',
-    async (req: Request<{ id: string }, {}, {}, {}>, response) => {
-      const data = await platformshHelper.getProjectInfo(req.params.id);
-      response.json({ result: { data } });
-    },
-  );
+  router.get('/project/:id', async (req: Request<{ id: string }>, res) => {
+    try {
+      const projectData = await platformshHelper.getProjectInfo(req.params.id);
+      res.json({ result: { projectData } });
+    } catch (error) {
+      logger.error(
+        `Failed to fetch project info for ID ${req.params.id}: ${error}`,
+      );
+      res.status(500).json({ error: 'Unable to retrieve project information' });
+    }
+  });
 
   router.get(
     '/project/:id/environments',
-    async (req: Request<{ id: string }, {}, {}, {}>, response) => {
-      const data = await platformshHelper.getProjectEnvironments(req.params.id);
-      response.json({ result: { data } });
+    async (req: Request<{ id: string }>, res) => {
+      try {
+        const environments = await platformshHelper.getProjectEnvironments(
+          req.params.id,
+        );
+        res.json({ result: { environments } });
+      } catch (error) {
+        logger.error(
+          `Failed to fetch environments for project ID ${req.params.id}: ${error}`,
+        );
+        res.status(500).json({ error: 'Unable to retrieve environments' });
+      }
     },
   );
 
@@ -53,41 +71,47 @@ export async function createRouter(
       req: Request<
         { id: string },
         {},
-        { environment_id: string; action: string },
-        {}
+        { environmentId: string; action: string }
       >,
-      response,
+      res,
     ) => {
-      const valid_action = [
+      const validActions = [
         'pause',
         'resume',
         'activate',
         'deactivate',
         'delete',
       ];
-      if (!valid_action.includes(req.body.action)) {
-        response.json({
+
+      if (!validActions.includes(req.body.action)) {
+        res.status(400).json({
           result: {
-            data: {
-              status: 0,
-              message: 'Invalid action',
-            },
+            status: 0,
+            message: `Invalid action: ${req.body.action}`,
           },
         });
         return;
       }
 
-      const data = await platformshHelper.doEnvironmentAction(
-        req.params.id,
-        req.body.environment_id,
-        req.body.action,
-      );
-      response.json({ result: { data } });
+      try {
+        const actionResult = await platformshHelper.doEnvironmentAction(
+          req.params.id,
+          req.body.environmentId,
+          req.body.action,
+        );
+        res.json({ result: { actionResult } });
+      } catch (error) {
+        logger.error(
+          `Failed to perform action on environment ${req.body.environmentId}: ${error}`,
+        );
+        res.status(500).json({ error: 'Unable to perform environment action' });
+      }
     },
   );
 
   const middleware = MiddlewareFactory.create({ logger, config });
 
   router.use(middleware.error());
+
   return router;
 }

@@ -55,7 +55,7 @@ export class PlatformshClient implements PlatformshApi {
       `${await this.getBaseUrl()}/project/${id}`,
     );
     const data = await response.json();
-    return data.result.data;
+    return data.result.projectData;
   }
 
   async getProjectEnvironments(id: string): Promise<PlatformshEnvironment[]> {
@@ -63,7 +63,7 @@ export class PlatformshClient implements PlatformshApi {
       `${await this.getBaseUrl()}/project/${id}/environments`,
     );
     const data = await response.json();
-    return data.result.data;
+    return data.result.environments;
   }
 
   async doEnvironmentAction(
@@ -78,7 +78,7 @@ export class PlatformshClient implements PlatformshApi {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ environment_id, action }),
+        body: JSON.stringify({ environmentId: environment_id, action }),
       },
     );
     return await response.json();

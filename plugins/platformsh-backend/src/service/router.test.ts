@@ -55,7 +55,7 @@ describe('createRouter', () => {
   describe('GET /project/:id', () => {
     it('returns a project detail', async () => {
       // Mock the listProjects method
-      const projectDetails = {
+      const projectData = {
         project_id: 'proj-123',
         project_title: 'My Awesome Project',
         status: 'active',
@@ -71,19 +71,19 @@ describe('createRouter', () => {
       };
       (
         PlatformshHelper.prototype.getProjectInfo as jest.Mock
-      ).mockResolvedValue(projectDetails);
+      ).mockResolvedValue(projectData);
 
       const response = await request(app).get('/project/abc-123');
 
       expect(response.status).toEqual(200);
-      expect(response.body).toEqual({ result: { data: projectDetails } });
+      expect(response.body).toEqual({ result: { projectData } });
     });
   });
 
   describe('GET /project/:id/environments', () => {
     it('returns project environments', async () => {
       // Mock the listProjects method
-      const enviroments = [
+      const environments = [
         {
           id: 'env-001',
           name: 'Development Environment',
@@ -111,12 +111,12 @@ describe('createRouter', () => {
       ];
       (
         PlatformshHelper.prototype.getProjectEnvironments as jest.Mock
-      ).mockResolvedValue(enviroments);
+      ).mockResolvedValue(environments);
 
       const response = await request(app).get('/project/abc-123/environments');
 
       expect(response.status).toEqual(200);
-      expect(response.body).toEqual({ result: { data: enviroments } });
+      expect(response.body).toEqual({ result: { environments } });
     });
   });
 
@@ -125,7 +125,7 @@ describe('createRouter', () => {
       // Mock the listProjects method
       const result = {
         status: 0,
-        message: 'Invalid action',
+        message: 'Invalid action: undefined',
       };
       (
         PlatformshHelper.prototype.doEnvironmentAction as jest.Mock
@@ -133,8 +133,8 @@ describe('createRouter', () => {
 
       const response = await request(app).post('/project/abc-123/environments');
 
-      expect(response.status).toEqual(200);
-      expect(response.body).toEqual({ result: { data: result } });
+      expect(response.status).toEqual(400);
+      expect(response.body).toEqual({ result });
     });
   });
 });
