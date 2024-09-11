@@ -23,7 +23,7 @@ export const platformshPlugin = createPlugin({
         fetchApi: fetchApiRef,
       },
       factory: ({ discoveryApi, fetchApi }) =>
-        new PlatformshClient({ discoveryApi, fetchApi }),
+        new PlatformshClient(discoveryApi, fetchApi),
     }),
   ],
 });

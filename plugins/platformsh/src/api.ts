@@ -4,9 +4,12 @@ import {
   FetchApi,
 } from '@backstage/core-plugin-api';
 import {
-  EnvironmentActionResult,
+  EnvironmentActionResponse,
+  ListProjectsResponse,
   PlatformshEnvironment,
   PlatformShProject,
+  ProjectEnvironmentsResponse,
+  ProjectInfoResponse,
 } from './models';
 
 export interface PlatformshApi {
@@ -14,10 +17,10 @@ export interface PlatformshApi {
   getProjectInfo(id: string): Promise<PlatformShProject>;
   getProjectEnvironments(id: string): Promise<PlatformshEnvironment[]>;
   doEnvironmentAction(
-    project_id: string,
-    environment_id: string,
+    projectId: string,
+    environmentId: string,
     action: string,
-  ): Promise<EnvironmentActionResult>;
+  ): Promise<EnvironmentActionResponse>;
 }
 
 export const platformshApiRef = createApiRef<PlatformshApi>({
@@ -25,62 +28,60 @@ export const platformshApiRef = createApiRef<PlatformshApi>({
 });
 
 export class PlatformshClient implements PlatformshApi {
-  private readonly discoveryApi: DiscoveryApi;
-  private readonly fetchApi: FetchApi;
-  private baseUrl: string = '';
+  private baseUrl: string | undefined;
 
-  constructor(options: { discoveryApi: DiscoveryApi; fetchApi: FetchApi }) {
-    this.discoveryApi = options.discoveryApi;
-    this.fetchApi = options.fetchApi;
-  }
+  constructor(
+    private readonly discoveryApi: DiscoveryApi,
+    private readonly fetchApi: FetchApi,
+  ) {}
 
-  async getBaseUrl() {
-    if (this.baseUrl) {
-      return this.baseUrl;
+  private async getBaseUrl(): Promise<string> {
+    if (!this.baseUrl) {
+      this.baseUrl = await this.discoveryApi.getBaseUrl('platformsh');
     }
-    this.baseUrl = await this.discoveryApi.getBaseUrl('platformsh');
     return this.baseUrl;
   }
 
-  async listProjects(): Promise<PlatformShProject[]> {
+  private async fetchApiData<T>(
+    path: string,
+    options?: RequestInit,
+  ): Promise<T> {
     const response = await this.fetchApi.fetch(
-      `${await this.getBaseUrl()}/projects`,
+      `${await this.getBaseUrl()}${path}`,
+      options,
     );
-    const data = await response.json();
+    return response.json();
+  }
+
+  async listProjects(): Promise<PlatformShProject[]> {
+    const data = await this.fetchApiData<ListProjectsResponse>('/projects');
     return data.result.projects;
   }
 
   async getProjectInfo(id: string): Promise<PlatformShProject> {
-    const response = await this.fetchApi.fetch(
-      `${await this.getBaseUrl()}/project/${id}`,
-    );
-    const data = await response.json();
+    const data = await this.fetchApiData<ProjectInfoResponse>(`/project/${id}`);
     return data.result.projectData;
   }
 
   async getProjectEnvironments(id: string): Promise<PlatformshEnvironment[]> {
-    const response = await this.fetchApi.fetch(
-      `${await this.getBaseUrl()}/project/${id}/environments`,
+    const data = await this.fetchApiData<ProjectEnvironmentsResponse>(
+      `/project/${id}/environments`,
     );
-    const data = await response.json();
     return data.result.environments;
   }
 
   async doEnvironmentAction(
-    project_id: string,
-    environment_id: string,
+    projectId: string,
+    environmentId: string,
     action: string,
-  ): Promise<EnvironmentActionResult> {
-    const response = await this.fetchApi.fetch(
-      `${await this.getBaseUrl()}/project/${project_id}/environments`,
+  ): Promise<EnvironmentActionResponse> {
+    return this.fetchApiData<EnvironmentActionResponse>(
+      `/project/${projectId}/environments`,
       {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ environmentId: environment_id, action }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ environmentId, action }),
       },
     );
-    return await response.json();
   }
 }

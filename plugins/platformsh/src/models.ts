@@ -27,11 +27,23 @@ export type PlatformshEnvironment = {
   parent: string;
 };
 
-export type EnvironmentActionResult = {
+export type EnvironmentActionResponse = {
   result: {
     actionResult: {
       valid: number;
       message: string;
     };
   };
+};
+
+export type ListProjectsResponse = {
+  result: { projects: PlatformShProject[] };
+};
+
+export type ProjectInfoResponse = {
+  result: { projectData: PlatformShProject };
+};
+
+export type ProjectEnvironmentsResponse = {
+  result: { environments: PlatformshEnvironment[] };
 };

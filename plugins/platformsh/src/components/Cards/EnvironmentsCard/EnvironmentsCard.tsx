@@ -78,20 +78,18 @@ export const EnvironmentsCard = ({ projectId }: { projectId: string }) => {
 
   const actionCallback = useCallback(
     async (action: string, env_id: string) => {
-      const { result } = await platformshApi.doEnvironmentAction(
-        projectId,
-        env_id,
-        action,
-      );
-      if (result.actionResult.valid) {
+      const {
+        result: { actionResult },
+      } = await platformshApi.doEnvironmentAction(projectId, env_id, action);
+      if (actionResult.valid) {
         alertApi.post({
-          message: result.actionResult.message,
+          message: actionResult.message,
           severity: 'success',
         });
         loadProjectEnvironments();
       } else {
         alertApi.post({
-          message: result.actionResult.message,
+          message: actionResult.message,
           severity: 'error',
         });
       }
