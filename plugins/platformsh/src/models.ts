@@ -26,3 +26,12 @@ export type PlatformshEnvironment = {
   updated_at: string;
   parent: string;
 };
+
+export type EnvironmentActionResult = {
+  result: {
+    data: {
+      valid: number;
+      message: string;
+    };
+  };
+};

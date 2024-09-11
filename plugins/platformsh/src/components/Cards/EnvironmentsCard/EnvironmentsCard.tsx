@@ -6,7 +6,7 @@ import {
   ResponseErrorPanel,
 } from '@backstage/core-components';
 import { PlatformshEnvironment } from '../../../models';
-import { useApi } from '@backstage/core-plugin-api';
+import { alertApiRef, useApi } from '@backstage/core-plugin-api';
 import { platformshApiRef } from '../../../api';
 import { ActionButtons } from './ActionButtons';
 import useAsyncFn from 'react-use/esm/useAsyncFn';
@@ -68,6 +68,7 @@ export const DenseTable = ({
 
 export const EnvironmentsCard = ({ projectId }: { projectId: string }) => {
   const platformshApi = useApi(platformshApiRef);
+  const alertApi = useApi(alertApiRef);
 
   const [loadState, loadProjectEnvironments] = useAsyncFn(async (): Promise<
     PlatformshEnvironment[]
@@ -77,10 +78,19 @@ export const EnvironmentsCard = ({ projectId }: { projectId: string }) => {
 
   const actionCallback = useCallback(
     async (action: string, env_id: string) => {
-      await platformshApi.doEnvironmentAction(projectId, env_id, action);
-      loadProjectEnvironments();
+      const { result } = await platformshApi.doEnvironmentAction(
+        projectId,
+        env_id,
+        action,
+      );
+      if (result.data.valid) {
+        alertApi.post({ message: result.data.message, severity: 'success' });
+        loadProjectEnvironments();
+      } else {
+        alertApi.post({ message: result.data.message, severity: 'error' });
+      }
     },
-    [platformshApi, projectId, loadProjectEnvironments],
+    [platformshApi, projectId, loadProjectEnvironments, alertApi],
   );
 
   useEffect(() => {

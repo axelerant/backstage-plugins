@@ -3,7 +3,11 @@ import {
   DiscoveryApi,
   FetchApi,
 } from '@backstage/core-plugin-api';
-import { PlatformshEnvironment, PlatformShProject } from './models';
+import {
+  EnvironmentActionResult,
+  PlatformshEnvironment,
+  PlatformShProject,
+} from './models';
 
 export interface PlatformshApi {
   listProjects(): Promise<PlatformShProject[]>;
@@ -13,7 +17,7 @@ export interface PlatformshApi {
     project_id: string,
     environment_id: string,
     action: string,
-  ): Promise<void>;
+  ): Promise<EnvironmentActionResult>;
 }
 
 export const platformshApiRef = createApiRef<PlatformshApi>({
@@ -66,7 +70,7 @@ export class PlatformshClient implements PlatformshApi {
     project_id: string,
     environment_id: string,
     action: string,
-  ): Promise<void> {
+  ): Promise<EnvironmentActionResult> {
     const response = await this.fetchApi.fetch(
       `${await this.getBaseUrl()}/project/${project_id}/environments`,
       {
@@ -77,6 +81,6 @@ export class PlatformshClient implements PlatformshApi {
         body: JSON.stringify({ environment_id, action }),
       },
     );
-    await response.json();
+    return await response.json();
   }
 }
