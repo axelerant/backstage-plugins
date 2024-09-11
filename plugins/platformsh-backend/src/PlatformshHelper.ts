@@ -3,25 +3,14 @@ import {
   RootConfigService,
 } from '@backstage/backend-plugin-api';
 import Client from 'platformsh-client';
+import Activity from 'platformsh-client/types/model/Activity';
 import Environment from 'platformsh-client/types/model/Environment';
+import { EnvironmentMethods, PlatformshEnvironment } from './model';
 
 type PlatformshAccessToken = {
   access_token: string;
   expires_in: number;
   token_type: string;
-};
-
-type PlatformshEnvironment = {
-  id: string;
-  name: string;
-  machine_name: string;
-  default_domain: string;
-  edge_hostname: string;
-  status: string;
-  type: string;
-  created_at: string;
-  updated_at: string;
-  parent: string;
 };
 
 export class PlatformshHelper {
@@ -171,7 +160,7 @@ export class PlatformshHelper {
   async doEnvironmentAction(
     project_id: string,
     env_id: string,
-    action: string,
+    action: EnvironmentMethods,
   ) {
     let successMsg = '';
     try {
@@ -184,26 +173,22 @@ export class PlatformshHelper {
         return result;
       }
 
-      if (action === 'pause') {
-        const activity = await environment.pause();
-        await activity.wait();
-        successMsg = 'Environment puased successfully!';
-      } else if (action === 'resume') {
-        const activity = await environment.resume();
-        await activity.wait();
-        successMsg = 'Environment resumed successfully!';
-      } else if (action === 'activate') {
-        const activity = await environment.activate();
-        await activity.wait();
-        successMsg = 'Environment activated successfully!';
-      } else if (action === 'deactivate') {
-        const activity = await environment.deactivate();
-        await activity.wait();
-        successMsg = 'Environment deactivated successfully!';
-      } else if (action === 'delete') {
+      const actionMap: {
+        [key in Exclude<EnvironmentMethods, 'delete'>]: () => Promise<Activity>;
+      } = {
+        pause: () => environment.pause(),
+        resume: () => environment.resume(),
+        activate: () => environment.activate(),
+        deactivate: () => environment.deactivate(),
+      };
+
+      if (action === 'delete') {
         await environment.delete();
-        successMsg = 'Environment deleted successfully!';
+      } else if (action in actionMap) {
+        const activity = await actionMap[action]();
+        await activity.wait();
       }
+      successMsg = `Environment ${action}d successfully!`;
     } catch (error) {
       let errorMsg = '';
       if (error instanceof Error) {
@@ -225,7 +210,7 @@ export class PlatformshHelper {
     };
   }
 
-  validateEnvironmentAction(enviroment: Environment, action: string) {
+  private validateEnvironmentAction(enviroment: Environment, action: string) {
     const validationMap: { [key: string]: string } = {
       production: 'No action can be performed on production environments',
       deleting: 'Environment is already deleting',

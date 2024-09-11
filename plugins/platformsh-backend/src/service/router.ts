@@ -6,6 +6,7 @@ import {
 import express, { Request } from 'express';
 import Router from 'express-promise-router';
 import { PlatformshHelper } from '../PlatformshHelper';
+import { EnvironmentMethods } from '../model';
 
 export interface RouterOptions {
   logger: LoggerService;
@@ -71,7 +72,7 @@ export async function createRouter(
       req: Request<
         { id: string },
         {},
-        { environmentId: string; action: string }
+        { environmentId: string; action: EnvironmentMethods }
       >,
       res,
     ) => {
