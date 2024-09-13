@@ -12,6 +12,22 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: example-website
+  annotations:
+    platform.sh/project-id: 2sp4wxybh6aia
+spec:
+  type: website
+  lifecycle: experimental
+  owner: user:development/guest
+  system: examples
+  providesApis: [example-grpc-api]
+---
+# https://backstage.io/docs/features/software-catalog/descriptor-format#kind-component
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: example-website-1
+  annotations:
+    platform.sh/project-id: brbqplxd7ycq6
 spec:
   type: website
   lifecycle: experimental
@@ -27,7 +43,7 @@ metadata:
 spec:
   type: grpc
   lifecycle: experimental
-  owner: guests
+  owner: user:development/guest
   system: examples
   definition: |
     syntax = "proto3";
