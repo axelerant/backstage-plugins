@@ -50,6 +50,16 @@ export class PlatformshClient implements PlatformshApi {
       `${await this.getBaseUrl()}${path}`,
       options,
     );
+
+    if (!response.ok) {
+      const errorBody = await response.json();
+
+      const errorMessage = errorBody?.error?.message || 'An error occurred';
+      const errorName = errorBody?.error?.name || 'Error';
+      const statusCode = errorBody?.response?.statusCode || response.status;
+
+      throw new Error(`${errorName} (${statusCode}): ${errorMessage}`);
+    }
     return response.json();
   }
 

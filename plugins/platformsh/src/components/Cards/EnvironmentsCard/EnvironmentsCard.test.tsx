@@ -9,7 +9,27 @@ import {
   TestApiProvider,
 } from '@backstage/test-utils';
 import { platformshApiRef } from '../../../api';
-import { PlatformshEnvironment } from '@internal/backstage-plugin-platformsh-common';
+import {
+  ANNOTATION_PLATFORMSH_PROJECT,
+  PlatformshEnvironment,
+} from '@internal/backstage-plugin-platformsh-common';
+import { permissionApiRef } from '@backstage/plugin-permission-react';
+
+jest.mock('@backstage/plugin-catalog-react', () => ({
+  useEntity: () => {
+    return {
+      loading: false,
+      entity: {
+        kind: 'Component',
+        metadata: {
+          namespace: 'foo',
+          name: 'bar',
+          [ANNOTATION_PLATFORMSH_PROJECT]: 'abc-123',
+        },
+      },
+    };
+  },
+}));
 
 describe('ProjectDetailsCard', () => {
   const server = setupServer();
@@ -23,8 +43,17 @@ describe('ProjectDetailsCard', () => {
     doEnvironmentAction: jest.fn(),
   };
 
+  const permissionApi: jest.Mocked<typeof permissionApiRef.T> = {
+    authorize: jest.fn(),
+  };
+
   const Wrapper = ({ children }: { children?: React.ReactNode }) => (
-    <TestApiProvider apis={[[platformshApiRef, platformshApi]]}>
+    <TestApiProvider
+      apis={[
+        [platformshApiRef, platformshApi],
+        [permissionApiRef, permissionApi],
+      ]}
+    >
       {children}
     </TestApiProvider>
   );

@@ -9,7 +9,10 @@ import {
   TestApiProvider,
 } from '@backstage/test-utils';
 import { platformshApiRef } from '../../api';
-import { PlatformshProject } from '@internal/backstage-plugin-platformsh-common';
+import {
+  PlatformshProject,
+  ANNOTATION_PLATFORMSH_PROJECT,
+} from '@internal/backstage-plugin-platformsh-common';
 
 jest.mock('@backstage/plugin-catalog-react', () => ({
   useEntity: () => {
@@ -17,7 +20,7 @@ jest.mock('@backstage/plugin-catalog-react', () => ({
       loading: false,
       entity: {
         metadata: {
-          ANNOTATION_PLATFORMSH_PROJECT: 'abc-123',
+          [ANNOTATION_PLATFORMSH_PROJECT]: 'abc-123',
         },
       },
     };

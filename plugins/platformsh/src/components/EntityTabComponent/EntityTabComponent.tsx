@@ -2,8 +2,8 @@ import React from 'react';
 import { Grid } from '@material-ui/core';
 import { ProjectDetailsCard } from '../Cards/ProjectDetailsCard';
 import { useEntity } from '@backstage/plugin-catalog-react';
-import { ANNOTATION_PLATFORMSH_PROJECT } from '../../utils';
 import { EnvironmentsCard } from '../Cards/EnvironmentsCard/EnvironmentsCard';
+import { ANNOTATION_PLATFORMSH_PROJECT } from '@internal/backstage-plugin-platformsh-common';
 
 export const EntityTabComponent = () => {
   const { entity } = useEntity();

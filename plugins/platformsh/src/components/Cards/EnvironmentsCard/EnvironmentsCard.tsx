@@ -5,21 +5,29 @@ import {
   Progress,
   ResponseErrorPanel,
 } from '@backstage/core-components';
-import { PlatformshEnvironment } from '@internal/backstage-plugin-platformsh-common';
+import {
+  PlatformshEnvironment,
+  platformshEnvironmentManagePermission,
+} from '@internal/backstage-plugin-platformsh-common';
 import { alertApiRef, useApi } from '@backstage/core-plugin-api';
 import { platformshApiRef } from '../../../api';
 import { ActionButtons } from './ActionButtons';
 import useAsyncFn from 'react-use/esm/useAsyncFn';
 import { Link } from '@material-ui/core';
+import { RequirePermission } from '@backstage/plugin-permission-react';
+import { useEntity } from '@backstage/plugin-catalog-react';
+import { Entity, stringifyEntityRef } from '@backstage/catalog-model';
 
 type DenseTableProps = {
   environments: PlatformshEnvironment[];
   actionCallback: (action: string, env_id: string) => Promise<void>;
+  entity: Entity;
 };
 
 export const DenseTable = ({
   environments,
   actionCallback,
+  entity,
 }: DenseTableProps) => {
   const columns: TableColumn[] = [
     { title: 'Name', field: 'name' },
@@ -48,10 +56,16 @@ export const DenseTable = ({
       type: environment.type,
       status: environment.status,
       action: (
-        <ActionButtons
-          enviroment={environment}
-          actionCallback={actionCallback}
-        />
+        <RequirePermission
+          permission={platformshEnvironmentManagePermission}
+          errorPage={<></>}
+          resourceRef={stringifyEntityRef(entity)}
+        >
+          <ActionButtons
+            enviroment={environment}
+            actionCallback={actionCallback}
+          />
+        </RequirePermission>
       ),
     };
   });
@@ -69,6 +83,7 @@ export const DenseTable = ({
 export const EnvironmentsCard = ({ projectId }: { projectId: string }) => {
   const platformshApi = useApi(platformshApiRef);
   const alertApi = useApi(alertApiRef);
+  const { entity } = useEntity();
 
   const [loadState, loadProjectEnvironments] = useAsyncFn(async (): Promise<
     PlatformshEnvironment[]
@@ -78,18 +93,26 @@ export const EnvironmentsCard = ({ projectId }: { projectId: string }) => {
 
   const actionCallback = useCallback(
     async (action: string, env_id: string) => {
-      const {
-        result: { actionResult },
-      } = await platformshApi.doEnvironmentAction(projectId, env_id, action);
-      if (actionResult.valid) {
+      try {
+        const {
+          result: { actionResult },
+        } = await platformshApi.doEnvironmentAction(projectId, env_id, action);
+
+        if (actionResult.valid) {
+          alertApi.post({
+            message: actionResult.message,
+            severity: 'success',
+          });
+          loadProjectEnvironments();
+        } else {
+          alertApi.post({
+            message: actionResult.message,
+            severity: 'error',
+          });
+        }
+      } catch (error) {
         alertApi.post({
-          message: actionResult.message,
-          severity: 'success',
-        });
-        loadProjectEnvironments();
-      } else {
-        alertApi.post({
-          message: actionResult.message,
+          message: String(error),
           severity: 'error',
         });
       }
@@ -110,6 +133,7 @@ export const EnvironmentsCard = ({ projectId }: { projectId: string }) => {
     <DenseTable
       environments={loadState.value || []}
       actionCallback={actionCallback}
+      entity={entity}
     />
   );
 };
