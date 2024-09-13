@@ -3,6 +3,7 @@ import express from 'express';
 import request from 'supertest';
 import { PlatformshHelper } from '../PlatformshHelper';
 import { createRouter } from './router';
+import { CatalogApi } from '@backstage/catalog-client';
 
 jest.mock('../PlatformshHelper');
 
@@ -13,10 +14,18 @@ describe('createRouter', () => {
     const logger = mockServices.logger.mock();
     const config = mockServices.rootConfig();
 
+    const mockCatalog: jest.Mocked<CatalogApi> = {
+      getEntities: jest.fn(),
+    } as any as jest.Mocked<CatalogApi>;
+
     const router = await createRouter({
       logger,
       config,
       platformshHelper: new PlatformshHelper(config, logger),
+      httpAuth: mockServices.httpAuth.mock(),
+      permissions: mockServices.permissions.mock(),
+      catalogApi: mockCatalog,
+      auth: mockServices.auth.mock(),
     });
     app = express().use(router);
   });

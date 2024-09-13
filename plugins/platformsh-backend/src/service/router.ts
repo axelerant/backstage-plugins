@@ -1,23 +1,51 @@
 import { MiddlewareFactory } from '@backstage/backend-defaults/rootHttpRouter';
 import {
   LoggerService,
+  PermissionsService,
   RootConfigService,
+  HttpAuthService,
+  AuthService,
 } from '@backstage/backend-plugin-api';
 import express, { Request } from 'express';
 import Router from 'express-promise-router';
 import { PlatformshHelper } from '../PlatformshHelper';
-import { EnvironmentMethods } from '@internal/backstage-plugin-platformsh-common';
+import {
+  EnvironmentMethods,
+  platformshEnvironmentManagePermission,
+} from '@internal/backstage-plugin-platformsh-common';
+import { NotAllowedError } from '@backstage/errors';
+import { AuthorizeResult } from '@backstage/plugin-permission-common';
+import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
+import { CatalogApi } from '@backstage/catalog-client';
+import { findEntityByProjectId } from '../utils';
+import { stringifyEntityRef } from '@backstage/catalog-model';
 
 export interface RouterOptions {
   logger: LoggerService;
   config: RootConfigService;
   platformshHelper: PlatformshHelper;
+  permissions: PermissionsService;
+  httpAuth: HttpAuthService;
+  catalogApi: CatalogApi;
+  auth: AuthService;
 }
 
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const { logger, config, platformshHelper } = options;
+  const {
+    logger,
+    config,
+    platformshHelper,
+    permissions,
+    httpAuth,
+    catalogApi,
+    auth,
+  } = options;
+
+  const permissionIntegrationRouter = createPermissionIntegrationRouter({
+    permissions: [platformshEnvironmentManagePermission],
+  });
 
   const router = Router();
   router.use(express.json());
@@ -26,6 +54,8 @@ export async function createRouter(
     logger.info('Health check - PONG!');
     res.json({ status: 'ok' });
   });
+
+  router.use(permissionIntegrationRouter);
 
   router.get('/projects', async (_, res) => {
     try {
@@ -92,6 +122,41 @@ export async function createRouter(
           },
         });
         return;
+      }
+
+      // Fetch Entity
+      const { token } = await auth.getPluginRequestToken({
+        onBehalfOf: await auth.getOwnServiceCredentials(),
+        targetPluginId: 'catalog',
+      });
+      const entity = await findEntityByProjectId(
+        catalogApi,
+        req.params.id,
+        token,
+      );
+      if (!entity) {
+        throw new Error(
+          'No matching entity found for given platformsh project.',
+        );
+      }
+      const entityRef = stringifyEntityRef(entity);
+      const credentials = await httpAuth.credentials(req, { allow: ['user'] });
+      const decision = (
+        await permissions.authorize(
+          [
+            {
+              permission: platformshEnvironmentManagePermission,
+              resourceRef: entityRef,
+            },
+          ],
+          { credentials },
+        )
+      )[0];
+
+      if (decision.result !== AuthorizeResult.ALLOW) {
+        throw new NotAllowedError(
+          `You are not authorised to perform ${req.body.action} action.`,
+        );
       }
 
       try {
