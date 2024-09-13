@@ -29,5 +29,9 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "@backstage/plugin-catalog-common": "^1.0.26",
+    "@backstage/plugin-permission-common": "^0.8.1"
+  }
 }
