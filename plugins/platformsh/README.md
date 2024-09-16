@@ -80,17 +80,24 @@ To get the Platform.sh component working, follow these steps:
 
 To display the tab only for entities where `platform.sh/project-id: <project-id>` is available, the plugin provides a conditional export `isPlatformshAvailable`.
 
-    ```ts
-    // At the top imports
-    import { EntityPlatformshContents, isPlatformshAvailable } from '@axelerant/backstage-plugin-platformsh';
+```ts
+// At the top imports
+import {
+  EntityPlatformshContents,
+  isPlatformshAvailable,
+} from '@axelerant/backstage-plugin-platformsh';
 
-    // Add the tab conditionally based on annotation availability
-    const serviceEntityPage = (
-      <EntityLayout>
-        {/* other tabs... */}
-        <EntityLayout.Route path="/platformsh" title="Platform.sh" if={isPlatformshAvailable}>
-          <EntityPlatformshContents />
-        </EntityLayout.Route>
-      </EntityLayout>
-    );
-    ```
+// Add the tab conditionally based on annotation availability
+const serviceEntityPage = (
+  <EntityLayout>
+    {/* other tabs... */}
+    <EntityLayout.Route
+      path="/platformsh"
+      title="Platform.sh"
+      if={isPlatformshAvailable}
+    >
+      <EntityPlatformshContents />
+    </EntityLayout.Route>
+  </EntityLayout>
+);
+```
