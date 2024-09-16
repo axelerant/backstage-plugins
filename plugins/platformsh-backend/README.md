@@ -1,33 +1,33 @@
-# Platformsh Backend Plugin
+# Platform.sh Backend Plugin
 
-Backend Plugin for [Platformsh frontend plugin](https://github.com/axelerant/backstage-plugins/tree/main/plugins/platformsh).
+Backend plugin for the [Platform.sh frontend plugin](https://github.com/axelerant/backstage-plugins/tree/main/plugins/platformsh).
 
 ## Setup
 
-1. Install plugin
+1. Install the plugin:
 
-```bash
-yarn --cwd packages/backend add @axelerant/backstage-plugin-platformsh-backend
-```
+   ```bash
+   yarn --cwd packages/backend add @axelerant/backstage-plugin-platformsh-backend
+   ```
 
-2. Add to backend package
+2. Add the plugin to the backend package:
 
-In your packages/backend/src/index.ts make the following changes:
+   In your `packages/backend/src/index.ts`, make the following changes:
 
-```diff
-  import { createBackend } from '@backstage/backend-defaults';
+   ```diff
+   import { createBackend } from '@backstage/backend-defaults';
 
-  const backend = createBackend();
+   const backend = createBackend();
 
-+ backend.add(import('@axelerant/backstage-plugin-platformsh-backend'));
+   + backend.add(import('@axelerant/backstage-plugin-platformsh-backend'));
 
-  backend.start();
-```
+   backend.start();
+   ```
 
-3. Configure a CLI token. Token can be created at [https://console.platform.sh/-/users/<your-user-name>/settings/tokens](https://console.platform.sh/-/users/<your-user-name>/settings/tokens)
+3. Configure a CLI token. You can create a token at [https://console.platform.sh/-/users/<your-user-name>/settings/tokens](https://console.platform.sh/-/users/<your-user-name>/settings/tokens).
 
-```yaml
-# app-config.yaml
-platformsh:
-  cli_token: <cli-token>
-```
+   ```yaml
+   # app-config.yaml
+   platformsh:
+     cli_token: <cli-token>
+   ```
