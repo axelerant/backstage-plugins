@@ -1,5 +1,5 @@
 {
-  "name": "@internal/backstage-plugin-platformsh-backend",
+  "name": "@axelerant/backstage-plugin-platformsh-backend",
   "version": "0.1.0",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -13,6 +13,19 @@
   "backstage": {
     "role": "backend-plugin"
   },
+  "keywords": [
+    "backstage",
+    "plugin",
+    "platformsh",
+    "platform.sh"
+  ],
+  "homepage": "https://github.com/axelerant/backstage-plugins",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/axelerant/backstage-plugins",
+    "directory": "plugins/platformsh-backend"
+  },
+  "author": "zeshanziya <zeshan.ziya@axelerant.com>",
   "scripts": {
     "start": "backstage-cli package start",
     "build": "backstage-cli package build",
@@ -32,7 +45,7 @@
     "@backstage/plugin-catalog-node": "^1.12.6",
     "@backstage/plugin-permission-common": "^0.8.1",
     "@backstage/plugin-permission-node": "^0.8.2",
-    "@internal/backstage-plugin-platformsh-common": "^0.1.0",
+    "@axelerant/backstage-plugin-platformsh-common": "^0.1.0",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
     "node-fetch": "^2.6.7",
