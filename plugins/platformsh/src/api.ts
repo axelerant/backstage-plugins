@@ -10,7 +10,7 @@ import {
   PlatformshProject,
   ProjectEnvironmentsResponse,
   ProjectInfoResponse,
-} from '@internal/backstage-plugin-platformsh-common';
+} from '@axelerant/backstage-plugin-platformsh-common';
 
 export interface PlatformshApi {
   listProjects(): Promise<PlatformshProject[]>;

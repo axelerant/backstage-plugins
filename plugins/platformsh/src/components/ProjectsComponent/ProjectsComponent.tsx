@@ -6,7 +6,7 @@ import {
   ResponseErrorPanel,
 } from '@backstage/core-components';
 import useAsync from 'react-use/lib/useAsync';
-import { PlatformshProject } from '@internal/backstage-plugin-platformsh-common';
+import { PlatformshProject } from '@axelerant/backstage-plugin-platformsh-common';
 import { useApi } from '@backstage/core-plugin-api';
 import { platformshApiRef } from '../../api';
 

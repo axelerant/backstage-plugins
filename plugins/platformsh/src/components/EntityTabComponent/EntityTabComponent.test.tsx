@@ -12,7 +12,7 @@ import { platformshApiRef } from '../../api';
 import {
   PlatformshProject,
   ANNOTATION_PLATFORMSH_PROJECT,
-} from '@internal/backstage-plugin-platformsh-common';
+} from '@axelerant/backstage-plugin-platformsh-common';
 
 jest.mock('@backstage/plugin-catalog-react', () => ({
   useEntity: () => {

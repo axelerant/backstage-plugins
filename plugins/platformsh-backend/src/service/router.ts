@@ -12,7 +12,7 @@ import { PlatformshHelper } from '../PlatformshHelper';
 import {
   EnvironmentMethods,
   platformshEnvironmentManagePermission,
-} from '@internal/backstage-plugin-platformsh-common';
+} from '@axelerant/backstage-plugin-platformsh-common';
 import { NotAllowedError } from '@backstage/errors';
 import { AuthorizeResult } from '@backstage/plugin-permission-common';
 import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';

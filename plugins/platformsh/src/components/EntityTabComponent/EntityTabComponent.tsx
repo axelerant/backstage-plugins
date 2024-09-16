@@ -3,7 +3,7 @@ import { Grid } from '@material-ui/core';
 import { ProjectDetailsCard } from '../Cards/ProjectDetailsCard';
 import { useEntity } from '@backstage/plugin-catalog-react';
 import { EnvironmentsCard } from '../Cards/EnvironmentsCard/EnvironmentsCard';
-import { ANNOTATION_PLATFORMSH_PROJECT } from '@internal/backstage-plugin-platformsh-common';
+import { ANNOTATION_PLATFORMSH_PROJECT } from '@axelerant/backstage-plugin-platformsh-common';
 
 export const EntityTabComponent = () => {
   const { entity } = useEntity();

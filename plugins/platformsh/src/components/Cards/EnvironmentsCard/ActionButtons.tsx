@@ -6,7 +6,7 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { PlatformshEnvironment } from '@internal/backstage-plugin-platformsh-common';
+import { PlatformshEnvironment } from '@axelerant/backstage-plugin-platformsh-common';
 import useAsyncFn from 'react-use/lib/useAsyncFn';
 
 export const ActionButtons = ({

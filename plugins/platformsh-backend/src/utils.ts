@@ -1,6 +1,6 @@
 import { CatalogApi } from '@backstage/catalog-client';
 import { ComponentEntity } from '@backstage/catalog-model';
-import { ANNOTATION_PLATFORMSH_PROJECT } from '@internal/backstage-plugin-platformsh-common';
+import { ANNOTATION_PLATFORMSH_PROJECT } from '@axelerant/backstage-plugin-platformsh-common';
 
 export const findEntityByProjectId = async (
   catalogApi: CatalogApi,

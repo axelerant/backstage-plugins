@@ -9,7 +9,7 @@ import {
   TestApiProvider,
 } from '@backstage/test-utils';
 import { platformshApiRef } from '../../../api';
-import { PlatformshProject } from '@internal/backstage-plugin-platformsh-common';
+import { PlatformshProject } from '@axelerant/backstage-plugin-platformsh-common';
 
 describe('ProjectDetailsCard', () => {
   const server = setupServer();
