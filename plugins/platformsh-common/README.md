@@ -1,5 +1,3 @@
-# @internal/backstage-plugin-platformsh-common
+# Platformsh Common
 
-Welcome to the common package for the platformsh plugin!
-
-_This plugin was created through the Backstage CLI_
+Common types and functionalities for the [Platformsh](https://github.com/axelerant/backstage-plugins/tree/main/plugins/platformsh) plugin.
