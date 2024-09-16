@@ -1,26 +1,26 @@
 # Backstage Platform.sh Plugin
 
-Backstage plugin which project details and environments data from platform.sh
+A Backstage plugin that retrieves project details and environment data from Platform.sh.
 
 ## Features
 
-- A Page to list all projects from platform.sh.
-- An Entity Card to display current project detail.
-- An Entity card to display all environments for current project
-- Option to resume/pause/activate/deactivate/delete development environments
-- Permission support for environment actions
+- A page to list all projects from Platform.sh.
+- An entity card to display the current project details.
+- An entity card to display all environments for the current project.
+- Options to resume, pause, activate, deactivate, or delete development environments.
+- Permission support for environment actions.
 
 ## Setup
 
-The following sections will help you get the Platform.sh plugin setup and running
+The following sections will guide you through setting up and running the Platform.sh plugin.
 
-### Platformsh Backend
+### Platform.sh Backend
 
-You need to setup the [Platformsh Backend plugin](https://github.com/axelerant/backstage-plugins/tree/main/plugins/platformsh-backend) before you move forward with any of these steps if you haven't already
+Before proceeding, ensure that you have set up the [Platform.sh Backend plugin](https://github.com/axelerant/backstage-plugins/tree/main/plugins/platformsh-backend).
 
 ### Entity Annotation
 
-To be able to use the platformsh plugin you need to add the following annotation to any entities you want to use it with:
+To use the Platform.sh plugin, add the following annotation to the entities you want to associate with Platform.sh:
 
 ```yaml
 platform.sh/project-id: <platformsh-project-id>
@@ -28,67 +28,69 @@ platform.sh/project-id: <platformsh-project-id>
 
 ### Installation
 
-To get the platformsh component working you'll need to do the following two steps:
+To get the Platform.sh component working, follow these steps:
 
-1. First we need to add the `@axelerant/backstage-plugin-platformsh` package to your frontend app:
+1. First, add the `@axelerant/backstage-plugin-platformsh` package to your frontend app:
 
-```bash
-# From your Backstage root directory
-yarn --cwd packages/app add @axelerant/backstage-plugin-platformsh
-```
+   ```bash
+   # From your Backstage root directory
+   yarn --cwd packages/app add @axelerant/backstage-plugin-platformsh
+   ```
 
-2. Platformsh plugin provides a page component to list all projects from platform.sh.
+2. The Platform.sh plugin provides a page component to list all projects from Platform.sh.
 
-- Add a route to `App.tsx`
+   - Add a route to `App.tsx`:
 
-  ```ts
-  // import the the page
-  import { PlatformshPage } from '@axelerant/backstage-plugin-platformsh';
+     ```ts
+     // Import the page component
+     import { PlatformshPage } from '@axelerant/backstage-plugin-platformsh';
 
-  // add to `routes`
-  <Route path="/platformsh" element={<PlatformshPage />} />;
-  ```
+     // Add the route
+     <Route path="/platformsh" element={<PlatformshPage />} />;
+     ```
 
-- Add a menu item to Sidebar menu using `Root.tsx`
+   - Add a menu item to the sidebar in `Root.tsx`:
 
-  ```ts
-  // Import an icon.
-  import StorageIcon from '@material-ui/icons/Storage';
+     ```ts
+     // Import an icon
+     import StorageIcon from '@material-ui/icons/Storage';
 
-  // Add to sidebar items list
-  <SidebarItem icon={StorageIcon} to="platformsh" text="Platform.sh" />;
-  ```
+     // Add to the sidebar items list
+     <SidebarItem icon={StorageIcon} to="platformsh" text="Platform.sh" />;
+     ```
 
-3. Platformsh plugin provides a Entity tab component named `EntityPlatformshContents`.
+3. The Platform.sh plugin provides an entity tab component named `EntityPlatformshContents`.
 
-```ts
-// At the top imports
-import { EntityPlatformshContents } from '@axelerant/backstage-plugin-platformsh';
+   ```ts
+   // At the top imports
+   import { EntityPlatformshContents } from '@axelerant/backstage-plugin-platformsh;
 
-// You can add the tab to any number of pages, the service page is shown as an
-// example here
-const serviceEntityPage = (
-  <EntityLayout>
-    {/* other tabs... */}
-    <EntityLayout.Route path="/platformsh" title="Platformsh">
-      <EntityPlatformshContents />
-    </EntityLayout.Route>
-```
+   // Add the tab to any entity page, using the service entity page as an example
+   const serviceEntityPage = (
+     <EntityLayout>
+       {/* other tabs... */}
+       <EntityLayout.Route path="/platformsh" title="Platform.sh">
+         <EntityPlatformshContents />
+       </EntityLayout.Route>
+     </EntityLayout>
+   );
+   ```
 
-Note: This require entities to have a platform.sh annotation `platform.sh/project-id: project-id`. If not set, it will show a missing annotation warning.
+**Note:** This requires entities to have the Platform.sh annotation `platform.sh/project-id: <project-id>`. If not set, a missing annotation warning will be displayed.
 
-If you want to show the tab to only those entities where `platform.sh/project-id: project-id` is available, plugin provides an conditional export `isPlatformshAvailable` for the same.
+To display the tab only for entities where `platform.sh/project-id: <project-id>` is available, the plugin provides a conditional export `isPlatformshAvailable`.
 
-```ts
-// At the top imports
-import { EntityPlatformshContents, isPlatformshAvailable } from '@axelerant/backstage-plugin-platformsh';
+    ```ts
+    // At the top imports
+    import { EntityPlatformshContents, isPlatformshAvailable } from '@axelerant/backstage-plugin-platformsh;
 
-// You can add the tab to any number of pages, the service page is shown as an
-// example here
-const serviceEntityPage = (
-  <EntityLayout>
-    {/* other tabs... */}
-    <EntityLayout.Route path="/platformsh" title="Platformsh" if={isPlatformshAvailable}>
-      <EntityPlatformshContents />
-    </EntityLayout.Route>
-```
+    // Add the tab conditionally based on annotation availability
+    const serviceEntityPage = (
+      <EntityLayout>
+        {/* other tabs... */}
+        <EntityLayout.Route path="/platformsh" title="Platform.sh" if={isPlatformshAvailable}>
+          <EntityPlatformshContents />
+        </EntityLayout.Route>
+      </EntityLayout>
+    );
+    ```
