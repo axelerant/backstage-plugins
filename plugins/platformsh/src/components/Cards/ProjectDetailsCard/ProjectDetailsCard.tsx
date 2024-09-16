@@ -7,7 +7,7 @@ import {
 import { Typography, Box, makeStyles, Link } from '@material-ui/core';
 import { platformshApiRef } from '../../../api';
 import { useApi } from '@backstage/core-plugin-api';
-import { PlatformshProject } from '@internal/backstage-plugin-platformsh-common';
+import { PlatformshProject } from '@axelerant/backstage-plugin-platformsh-common';
 import useAsync from 'react-use/lib/useAsync';
 
 const useStyles = makeStyles(theme => ({

@@ -15,7 +15,7 @@ import {
   createCatalogConditionalDecision,
 } from '@backstage/plugin-catalog-backend/alpha';
 import { catalogEntityDeletePermission } from '@backstage/plugin-catalog-common/alpha';
-import { platformshEnvironmentManagePermission } from '@internal/backstage-plugin-platformsh-common';
+import { platformshEnvironmentManagePermission } from '@axelerant/backstage-plugin-platformsh-common';
 
 class CustomPermissionPolicy implements PermissionPolicy {
   async handle(

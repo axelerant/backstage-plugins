@@ -61,7 +61,7 @@ import {
 import {
   EntityPlatformshContents,
   isPlatformshAvailable,
-} from '@internal/backstage-plugin-platformsh';
+} from '@axelerant/backstage-plugin-platformsh';
 
 const techdocsContent = (
   <EntityTechdocsContent>

@@ -8,7 +8,7 @@ import Environment from 'platformsh-client/types/model/Environment';
 import {
   EnvironmentMethods,
   PlatformshEnvironment,
-} from '@internal/backstage-plugin-platformsh-common';
+} from '@axelerant/backstage-plugin-platformsh-common';
 
 type PlatformshAccessToken = {
   access_token: string;

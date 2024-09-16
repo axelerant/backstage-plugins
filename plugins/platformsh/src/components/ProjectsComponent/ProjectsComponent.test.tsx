@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { ProjectsComponent } from './ProjectsComponent';
 import { platformshApiRef } from '../../api';
 import { TestApiProvider } from '@backstage/test-utils';
-import { PlatformshProject } from '@internal/backstage-plugin-platformsh-common';
+import { PlatformshProject } from '@axelerant/backstage-plugin-platformsh-common';
 
 describe('ProjectsComponent', () => {
   const platformshApi: jest.Mocked<typeof platformshApiRef.T> = {

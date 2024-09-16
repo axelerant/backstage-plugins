@@ -8,7 +8,7 @@ import {
 import {
   PlatformshEnvironment,
   platformshEnvironmentManagePermission,
-} from '@internal/backstage-plugin-platformsh-common';
+} from '@axelerant/backstage-plugin-platformsh-common';
 import { alertApiRef, useApi } from '@backstage/core-plugin-api';
 import { platformshApiRef } from '../../../api';
 import { ActionButtons } from './ActionButtons';
