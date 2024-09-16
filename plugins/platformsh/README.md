@@ -63,9 +63,9 @@ To get the Platform.sh component working, follow these steps:
 
    ```ts
    // At the top imports
-   import { EntityPlatformshContents } from '@axelerant/backstage-plugin-platformsh;
+   import { EntityPlatformshContents } from '@axelerant/backstage-plugin-platformsh';
 
-   // Add the tab to any entity page, using the service entity page as an example
+   // Add the tab to any entity page, using the service entity page as an example.
    const serviceEntityPage = (
      <EntityLayout>
        {/* other tabs... */}
@@ -82,7 +82,7 @@ To display the tab only for entities where `platform.sh/project-id: <project-id>
 
     ```ts
     // At the top imports
-    import { EntityPlatformshContents, isPlatformshAvailable } from '@axelerant/backstage-plugin-platformsh;
+    import { EntityPlatformshContents, isPlatformshAvailable } from '@axelerant/backstage-plugin-platformsh';
 
     // Add the tab conditionally based on annotation availability
     const serviceEntityPage = (
