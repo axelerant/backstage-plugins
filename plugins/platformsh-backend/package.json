@@ -12,7 +12,13 @@
     "types": "dist/index.d.ts"
   },
   "backstage": {
-    "role": "backend-plugin"
+    "role": "backend-plugin",
+    "pluginId": "platformsh",
+    "pluginPackages": [
+      "@axelerant/backstage-plugin-platformsh",
+      "@axelerant/backstage-plugin-platformsh-backend",
+      "@axelerant/backstage-plugin-platformsh-common"
+    ]
   },
   "keywords": [
     "backstage",
