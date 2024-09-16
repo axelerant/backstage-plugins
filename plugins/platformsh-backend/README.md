@@ -1,14 +1,33 @@
-# platformsh
+# Platformsh Backend Plugin
 
-Welcome to the platformsh backend plugin!
+Backend Plugin for [Platformsh frontend plugin](https://github.com/axelerant/backstage-plugins/tree/main/plugins/platformsh).
 
-_This plugin was created through the Backstage CLI_
+## Setup
 
-## Getting started
+1. Install plugin
 
-Your plugin has been added to the example app in this repository, meaning you'll be able to access it by running `yarn
-start` in the root directory, and then navigating to [/platformsh/health](http://localhost:7007/api/platformsh/health).
+```bash
+yarn --cwd packages/backend add @axelerant/backstage-plugin-platformsh-backend
+```
 
-You can also serve the plugin in isolation by running `yarn start` in the plugin directory.
-This method of serving the plugin provides quicker iteration speed and a faster startup and hot reloads.
-It is only meant for local development, and the setup for it can be found inside the [/dev](./dev) directory.
+2. Add to backend package
+
+In your packages/backend/src/index.ts make the following changes:
+
+```diff
+  import { createBackend } from '@backstage/backend-defaults';
+
+  const backend = createBackend();
+
++ backend.add(import('@axelerant/backstage-plugin-platformsh-backend'));
+
+  backend.start();
+```
+
+3. Configure a CLI token. Token can be created at [https://console.platform.sh/-/users/<your-user-name>/settings/tokens](https://console.platform.sh/-/users/<your-user-name>/settings/tokens)
+
+```yaml
+# app-config.yaml
+platformsh:
+  cli_token: <cli-token>
+```

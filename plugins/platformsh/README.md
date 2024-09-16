@@ -32,7 +32,7 @@ To get the platformsh component working you'll need to do the following two step
 
 1. First we need to add the `@axelerant/backstage-plugin-platformsh` package to your frontend app:
 
-```ts
+```bash
 # From your Backstage root directory
 yarn --cwd packages/app add @axelerant/backstage-plugin-platformsh
 ```
