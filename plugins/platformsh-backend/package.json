@@ -1,6 +1,6 @@
 {
   "name": "@axelerant/backstage-plugin-platformsh-backend",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Backstage backend plugin for Platform.sh integration!",
   "main": "src/index.ts",
   "types": "src/index.ts",
@@ -70,5 +70,6 @@
   "files": [
     "dist",
     "config.d.ts"
-  ]
+  ],
+  "configSchema": "config.d.ts"
 }
