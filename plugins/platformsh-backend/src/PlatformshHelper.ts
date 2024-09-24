@@ -2,7 +2,7 @@ import {
   LoggerService,
   RootConfigService,
 } from '@backstage/backend-plugin-api';
-import Client from 'platformsh-client';
+// import Client from 'platformsh-client';
 import Activity from 'platformsh-client/types/model/Activity';
 import Environment from 'platformsh-client/types/model/Environment';
 import {
@@ -31,6 +31,11 @@ export class PlatformshHelper {
     return currentTime >= this.tokenExpireTime;
   }
 
+  async loadPlatformshClient() {
+    const { default: Client } = await import('platformsh-client');
+    return Client;
+  }
+
   async getClient() {
     try {
       if (this.isTokenExpired()) {
@@ -44,6 +49,7 @@ export class PlatformshHelper {
     } catch (error) {
       this.logger.error('Unable to get platformsh access token');
     }
+    const Client = await this.loadPlatformshClient();
     return new Client({
       access_token: this.lastAccessToken.access_token,
       api_url: 'https://api.platform.sh/api',
