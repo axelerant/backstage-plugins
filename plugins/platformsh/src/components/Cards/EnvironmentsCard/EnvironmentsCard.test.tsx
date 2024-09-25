@@ -41,6 +41,7 @@ describe('ProjectDetailsCard', () => {
     getProjectInfo: jest.fn(),
     getProjectEnvironments: jest.fn(),
     doEnvironmentAction: jest.fn(),
+    pollForActivityCompletion: jest.fn(),
   };
 
   const permissionApi: jest.Mocked<typeof permissionApiRef.T> = {

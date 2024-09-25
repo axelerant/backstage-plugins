@@ -175,6 +175,31 @@ export async function createRouter(
     },
   );
 
+  router.post(
+    '/activity/:id/status',
+    async (
+      req: Request<
+        { id: string },
+        {},
+        { environmentId: string; projectId: string }
+      >,
+      res,
+    ) => {
+      try {
+        const activity = await platformshHelper.getEnvironmentActivity(
+          req.body.projectId,
+          req.body.environmentId,
+          req.params.id,
+        );
+        console.log(activity, activity.isComplete());
+        res.json({ result: { completed: activity.isComplete() } });
+      } catch (error) {
+        logger.error(`Unable to get activity status: ${error}`);
+        res.status(500).json({ error: 'Unable to get activity status' });
+      }
+    },
+  );
+
   const middleware = MiddlewareFactory.create({ logger, config });
 
   router.use(middleware.error());

@@ -5,6 +5,7 @@ import {
 } from '@backstage/core-plugin-api';
 import {
   EnvironmentActionResponse,
+  EnvironmentActivityStatusResponse,
   ListProjectsResponse,
   PlatformshEnvironment,
   PlatformshProject,
@@ -21,6 +22,11 @@ export interface PlatformshApi {
     environmentId: string,
     action: string,
   ): Promise<EnvironmentActionResponse>;
+  pollForActivityCompletion(
+    projectId: string,
+    environmentId: string,
+    acticityId: string,
+  ): Promise<void>;
 }
 
 export const platformshApiRef = createApiRef<PlatformshApi>({
@@ -52,7 +58,12 @@ export class PlatformshClient implements PlatformshApi {
     );
 
     if (!response.ok) {
-      const errorBody = await response.json();
+      let errorBody;
+      try {
+        errorBody = await response.json();
+      } catch {
+        errorBody = {};
+      }
 
       const errorMessage = errorBody?.error?.message || 'An error occurred';
       const errorName = errorBody?.error?.name || 'Error';
@@ -93,5 +104,36 @@ export class PlatformshClient implements PlatformshApi {
         body: JSON.stringify({ environmentId, action }),
       },
     );
+  }
+
+  async pollForActivityCompletion(
+    projectId: string,
+    environmentId: string,
+    activityId: string,
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const poll = setInterval(async () => {
+        try {
+          const {
+            result: { completed },
+          } = await this.fetchApiData<EnvironmentActivityStatusResponse>(
+            `/activity/${activityId}/status`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ environmentId, projectId }),
+            },
+          );
+
+          if (completed) {
+            clearInterval(poll);
+            resolve();
+          }
+        } catch (error) {
+          clearInterval(poll);
+          reject(error);
+        }
+      }, 5000);
+    });
   }
 }

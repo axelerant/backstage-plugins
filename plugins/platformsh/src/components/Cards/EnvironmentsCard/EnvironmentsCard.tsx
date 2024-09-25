@@ -101,8 +101,19 @@ export const EnvironmentsCard = ({ projectId }: { projectId: string }) => {
         if (actionResult.valid) {
           alertApi.post({
             message: actionResult.message,
-            severity: 'success',
+            severity: actionResult.activityId ? 'info' : 'success',
           });
+          if (actionResult.activityId) {
+            await platformshApi.pollForActivityCompletion(
+              projectId,
+              env_id,
+              actionResult.activityId,
+            );
+            alertApi.post({
+              message: `Environment ${action}d successfully!`,
+              severity: 'success',
+            });
+          }
           loadProjectEnvironments();
         } else {
           alertApi.post({

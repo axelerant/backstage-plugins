@@ -20,6 +20,7 @@ describe('PlatformshPageComponent', () => {
     getProjectInfo: jest.fn(),
     getProjectEnvironments: jest.fn(),
     doEnvironmentAction: jest.fn(),
+    pollForActivityCompletion: jest.fn(),
   };
 
   const Wrapper = ({ children }: { children?: React.ReactNode }) => (
