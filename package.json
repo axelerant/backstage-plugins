@@ -24,7 +24,7 @@
     "prettier:check": "prettier --check .",
     "new": "backstage-cli new --scope internal",
     "release:version": "changeset version && prettier --write '{packages,plugins}/*/{package.json,CHANGELOG.md}' && yarn install",
-    "release:publish": "tsc && build:all && changeset publish"
+    "release:publish": "tsc && yarn build:all && changeset publish"
   },
   "workspaces": {
     "packages": [
