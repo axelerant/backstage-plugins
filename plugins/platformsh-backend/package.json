@@ -67,9 +67,6 @@
     "msw": "^2.3.1",
     "supertest": "^6.2.4"
   },
-  "bundleDependencies": [
-    "platformsh-client"
-  ],
   "files": [
     "dist",
     "config.d.ts"
