@@ -32,6 +32,7 @@ export type EnvironmentActionResponse = {
     actionResult: {
       valid: number;
       message: string;
+      activityId: string;
     };
   };
 };
@@ -54,3 +55,9 @@ export type EnvironmentMethods =
   | 'activate'
   | 'deactivate'
   | 'delete';
+
+export type EnvironmentActivityStatusResponse = {
+  result: {
+    completed: boolean;
+  };
+};

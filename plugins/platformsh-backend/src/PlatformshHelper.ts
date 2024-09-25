@@ -172,6 +172,7 @@ export class PlatformshHelper {
     action: EnvironmentMethods,
   ) {
     let successMsg = '';
+    let activityId = '';
     try {
       const environment = await this.getEnvironment(
         project_id,
@@ -193,11 +194,12 @@ export class PlatformshHelper {
 
       if (action === 'delete') {
         await environment.delete();
+        successMsg = `Environment ${action}d successfully!`;
       } else if (action in actionMap) {
         const activity = await actionMap[action]();
-        await activity.wait();
+        activityId = activity.id;
+        successMsg = `Action ${action} for environment ${env_id} has started and will finish soon.`;
       }
-      successMsg = `Environment ${action}d successfully!`;
     } catch (error) {
       let errorMsg = '';
       if (error instanceof Error) {
@@ -216,6 +218,7 @@ export class PlatformshHelper {
     return {
       valid: 1,
       message: successMsg,
+      activityId: activityId,
     };
   }
 
@@ -253,5 +256,19 @@ export class PlatformshHelper {
     return {
       valid: 1,
     };
+  }
+
+  async getEnvironmentActivity(
+    project_id: string,
+    env_id: string,
+    activity_id: string,
+  ) {
+    const client = await this.getClient();
+    const activity = await client.getEnvironmentActivity(
+      project_id,
+      encodeURIComponent(env_id),
+      activity_id,
+    );
+    return activity;
   }
 }
