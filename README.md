@@ -8,3 +8,13 @@ To start the app, run:
 yarn install
 yarn dev
 ```
+
+<h2>Our Plugins</h2>
+
+| Plugin          | link                                                                                |
+| --------------- | ----------------------------------------------------------------------------------- |
+| **Platform.sh** | [Docs](https://github.com/axelerant/backstage-plugins/tree/main/plugins/platformsh) |
+
+<footer>
+  <p align="center">@Axelerant 2024 &#169; All Rights Reserved</p>
+</footer>
