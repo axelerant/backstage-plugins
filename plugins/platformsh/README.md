@@ -2,13 +2,20 @@
 
 A Backstage plugin that retrieves project details and environment data from Platform.sh.
 
-## Features
+## Current Features
 
 - A page to list all projects from Platform.sh.
 - An entity card to display the current project details.
 - An entity card to display all environments for the current project.
 - Options to resume, pause, activate, deactivate, or delete development environments.
 - Permission support for environment actions.
+
+## Future Development Plans
+
+- Display environment activities and logs
+- Create and deploy new or existing branches
+- Add a scaffolder action for deploying new services
+- Display metrics (Currently, there is no API endpoint available for this. Once available, we can consider adding it)
 
 ## Setup
 
