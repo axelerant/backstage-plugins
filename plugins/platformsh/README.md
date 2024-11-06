@@ -9,6 +9,7 @@ A Backstage plugin that retrieves project details and environment data from Plat
 - An entity card to display all environments for the current project.
 - Options to resume, pause, activate, deactivate, or delete development environments.
 - Permission support for environment actions.
+- Support for New Front End system
 
 ## Future Development Plans
 
