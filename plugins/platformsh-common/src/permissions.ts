@@ -3,7 +3,7 @@ import { RESOURCE_TYPE_CATALOG_ENTITY } from '@backstage/plugin-catalog-common/a
 
 export const platformshEnvironmentManagePermission = createPermission({
   name: 'platformsh.environment.manage',
-  attributes: {},
+  attributes: { action: 'update' },
   resourceType: RESOURCE_TYPE_CATALOG_ENTITY,
 });
 
