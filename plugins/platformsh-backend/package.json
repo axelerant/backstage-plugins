@@ -51,7 +51,7 @@
     "@backstage/plugin-catalog-node": "^1.12.6",
     "@backstage/plugin-permission-common": "^0.8.1",
     "@backstage/plugin-permission-node": "^0.8.2",
-    "@axelerant/backstage-plugin-platformsh-common": "^0.1.1",
+    "@axelerant/backstage-plugin-platformsh-common": "^0.1.2",
     "express": "^4.17.1",
     "express-promise-router": "^4.1.0",
     "node-fetch": "^2.6.7",
