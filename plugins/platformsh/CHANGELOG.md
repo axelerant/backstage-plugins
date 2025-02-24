@@ -1,5 +1,11 @@
 # @axelerant/backstage-plugin-platformsh
 
+## 0.1.2
+
+### Patch Changes
+
+- f6f2658: use latest platformsh common package
+
 ## 0.1.1
 
 ### Patch Changes
