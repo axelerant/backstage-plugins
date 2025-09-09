@@ -5,6 +5,7 @@ import {
 // import Client from 'platformsh-client';
 import Activity from 'platformsh-client/types/model/Activity';
 import Environment from 'platformsh-client/types/model/Environment';
+import Region from 'platformsh-client/types/model/Region';
 import {
   EnvironmentMethods,
   PlatformshEnvironment,
@@ -90,40 +91,43 @@ export class PlatformshHelper {
 
   async listProjects() {
     const client = await this.getClient();
-    // Passing bool value givens an error @todo fix undefined as unknown as boolean later
-    const projects = await client.getSubscriptions(
-      { status: 'active' },
-      undefined as unknown as boolean,
+
+    const projects = await client.getProjects();
+    return (
+      projects &&
+      projects.map(project => ({
+        id: project.id,
+        project_id: project.id,
+        project_title: project.title,
+        status: project.status,
+        plan: project.plan,
+        project_region_label: project.region_label,
+        project_ui: project.getUri(),
+      }))
     );
-    return projects.map(project => ({
-      id: project.id,
-      project_id: project.project_id,
-      project_title: project.project_title,
-      status: project.status,
-      plan: project.plan,
-      project_region_label: project.project_region_label,
-      project_ui: project.project_ui,
-    }));
   }
 
   async getProjectInfo(id: string) {
     const client = await this.getClient();
     const project = await client.getProject(id);
-    const subscriptionId = project.getSubscriptionId();
-    const subscription = await client.getSubscription(subscriptionId);
     const enviroments = await client.getEnvironments(id);
+    const regions: any = await client.getRegions();
+    const projectRegion =
+      regions && regions.find((region: Region) => region.id === project.region);
 
     return {
       project_id: project.id,
       project_title: project.title,
-      status: subscription.status,
-      plan: subscription.plan,
-      project_region_label: subscription.project_region_label,
-      project_ui: subscription.project_ui,
-      size: subscription.storage,
+      status: project.status,
+      plan: project.plan,
+      project_region_label: projectRegion
+        ? projectRegion.label
+        : project.region,
+      project_ui: project.getUri(),
+      size: project.subscription.storage,
       environment: {
-        count: project.subscription.environments + 1,
-        used: enviroments.length,
+        count: project.subscription.user_licenses + 1,
+        used: enviroments.filter(env => env.status !== 'inactive').length,
       },
       url: await this.getProjectDomain(enviroments),
     };
