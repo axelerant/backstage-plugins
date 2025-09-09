@@ -1,5 +1,11 @@
 # @axelerant/backstage-plugin-platformsh-backend
 
+## 0.1.6
+
+### Patch Changes
+
+- 4244f3d: - Fixed broken Platform.sh integration by updating deprecated API endpoint ([#14](https://github.com/axelerant/backstage-plugins/issues/14))
+
 ## 0.1.5
 
 ### Patch Changes
